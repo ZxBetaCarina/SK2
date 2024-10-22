@@ -1,0 +1,15 @@
+skill_game = Skill Game
+total_balance = Total Balance
+points = Points
+withdraw = Withdraw
+max = Max
+min = Min
+total_bet = Total Bet
+paytable = Paytable
+for_now = For now
+jackpot_mode = Jackpot Mode
+wild = Wild
+got_it = Got it
+collect = Collect
+reward = Reward
+bet_amount = Bet Amount

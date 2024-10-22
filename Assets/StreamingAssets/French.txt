@@ -1,0 +1,15 @@
+skill_game = Jeu de compétence
+total_balance = Solde total
+points = Points
+withdraw = Retrait
+max = Max
+min = Min
+total_bet = Total des mises
+paytable = Table de paiement
+for_now = Pour l'instant
+jackpot_mode = Mode Jackpot
+wild = Wild
+got_it = Compris
+collect = Collecter
+reward = Récompense
+bet_amount = Montant de la mise

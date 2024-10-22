@@ -1,0 +1,15 @@
+skill_game = Geschicklichkeitsspiel
+total_balance = Gesamtbilanz
+points = Punkte
+withdraw = Abheben
+max = Max
+min = Min
+total_bet = Gesamteinsatz
+paytable = Auszahlungstabelle
+for_now = Jetzt
+jackpot_mode = Jackpot-Modus
+wild = Wild
+got_it = Verstanden
+collect = Sammeln
+reward = Belohnung
+bet_amount = Wetteinsatz

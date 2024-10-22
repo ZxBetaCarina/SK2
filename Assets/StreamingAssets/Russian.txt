@@ -1,0 +1,15 @@
+skill_game = Игра навыков
+total_balance = Общий баланс
+points = Очки
+withdraw = Вывести
+max = Макс
+min = Мин
+total_bet = Общая ставка
+paytable = Таблица выплат
+for_now = На данный момент
+jackpot_mode = Режим джекпота
+wild = Дикий
+got_it = Понял
+collect = Собрать
+reward = Награда
+bet_amount = Сумма ставки

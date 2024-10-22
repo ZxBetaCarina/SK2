@@ -1,0 +1,20 @@
+{
+  "GlobalObjectId_V1-2-6d3a25aa1b80259458e2d7a42f48a5c4-492837571-0": {
+    "GameObjectId": "GlobalObjectId_V1-2-6d3a25aa1b80259458e2d7a42f48a5c4-492837571-0",
+    "CommentText": "RNG By Seed\nWeighted RNG",
+    "AssetGUID": "6d3a25aa1b80259458e2d7a42f48a5c4",
+    "UniqueItemID": "GlobalObjectId_V1-2-6d3a25aa1b80259458e2d7a42f48a5c4-492837571-0"
+  },
+  "GlobalObjectId_V1-2-6d3a25aa1b80259458e2d7a42f48a5c4-502236073-0": {
+    "GameObjectId": "GlobalObjectId_V1-2-6d3a25aa1b80259458e2d7a42f48a5c4-502236073-0",
+    "CommentText": "Purpose Unspecified might \nhave to remove later. Included \nbecause of clients reference material",
+    "AssetGUID": "6d3a25aa1b80259458e2d7a42f48a5c4",
+    "UniqueItemID": "GlobalObjectId_V1-2-6d3a25aa1b80259458e2d7a42f48a5c4-502236073-0"
+  },
+  "GlobalObjectId_V1-2-6d3a25aa1b80259458e2d7a42f48a5c4-792512385-0": {
+    "GameObjectId": "GlobalObjectId_V1-2-6d3a25aa1b80259458e2d7a42f48a5c4-792512385-0",
+    "CommentText": "Might have to remove later.\nNo use, only present in client UI.",
+    "AssetGUID": "6d3a25aa1b80259458e2d7a42f48a5c4",
+    "UniqueItemID": "GlobalObjectId_V1-2-6d3a25aa1b80259458e2d7a42f48a5c4-792512385-0"
+  }
+}

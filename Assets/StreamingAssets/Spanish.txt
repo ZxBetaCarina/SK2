@@ -1,0 +1,15 @@
+skill_game = Juego de habilidad
+total_balance = Saldo total
+points = Puntos
+withdraw = Retirar
+max = Máx
+min = Mín
+total_bet = Total de apuestas
+paytable = Tabla de pagos
+for_now = Por ahora
+jackpot_mode = Modo Jackpot
+wild = Comodín
+got_it = Entendido
+collect = Recoger
+reward = Recompensa
+bet_amount = Cantidad de apuesta

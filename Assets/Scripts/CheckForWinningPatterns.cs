@@ -37,6 +37,7 @@ public class CheckForWinningPatterns : MonoBehaviour
 
     [Header("Bonus and Jackpot Icon")]
     [SerializeField] private Sprite bonus1;
+    [SerializeField] private Sprite bonus2;
     /*[SerializeField] private Sprite bonus2;
     [SerializeField] private Sprite bonus3;
     [Space, SerializeField] private Sprite jackpotMinor;
@@ -300,6 +301,10 @@ public class CheckForWinningPatterns : MonoBehaviour
                         {
                             StartCoroutine(DelayFreeSpin());                                        // Enable FREE Spin
                         }
+                        else if (detectedObject.collider.GetComponent<SpriteRenderer>().sprite == bonus2)
+                        {
+                            StartCoroutine(Bonus2start());                                                               // Enable Rainbow Jump
+                        }
                         else
                         {
 
@@ -317,6 +322,13 @@ public class CheckForWinningPatterns : MonoBehaviour
                 }
             }
         }
+    }
+
+    
+    private IEnumerator Bonus2start()
+    {
+        yield return new WaitForSeconds(2f);
+        SceneManager.LoadScene(2);
     }
 
     private IEnumerator DelayFreeSpin()

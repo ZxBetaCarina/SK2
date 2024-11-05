@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 namespace RainbowJump.Scripts
 {
@@ -39,6 +40,7 @@ namespace RainbowJump.Scripts
         public AudioClip deathSound;
         public AudioClip buttonSound;
         private AudioSource audioSource;
+        
 
 
         // Start is called before the first frame update
@@ -50,9 +52,12 @@ namespace RainbowJump.Scripts
 
             audioSource = GetComponent<AudioSource>();
 
+            RestartGame();
+
             // Load the high score from PlayerPrefs and display it in the UI
             highScore = PlayerPrefs.GetFloat("HighScore", 0f);
             highScoreText.text = "High Score: " + highScore.ToString("0");
+            
         }
 
         // Update is called once per frame
@@ -100,6 +105,10 @@ namespace RainbowJump.Scripts
             settingsButtons.SetActive(false);
             tapToStartBtn.SetActive(false);
             playerMovement.enabled = true;
+        }
+        public void OnRestartClick()
+        {
+            SceneManager.LoadScene(1);
         }
 
         public void RestartGame()

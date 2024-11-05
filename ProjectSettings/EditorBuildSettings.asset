@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Rainbow Jump/Scenes/RainbowJump.unity
     guid: a3ef66529084ce342b90a6ae9c1f9008
+  - enabled: 1
+    path: Assets/Rainbow Jump/Scenes/Main.unity
+    guid: cb1321747e434e646ab7088f01c60afb
   m_configObjects: {}

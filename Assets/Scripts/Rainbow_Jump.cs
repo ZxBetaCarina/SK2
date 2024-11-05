@@ -7,10 +7,12 @@ using UnityEngine.SceneManagement;
 public class Rainbow_Jump : MonoBehaviour
 {
     public Button Rainbowjump;
+    
     // Start is called before the first frame update
     void Start()
     {
         Rainbowjump.onClick.AddListener(OnRainbowjumpClick);
+
     }
 
     // Update is called once per frame
@@ -23,4 +25,5 @@ public class Rainbow_Jump : MonoBehaviour
     {
         SceneManager.LoadScene(2);
     }
+    
 }

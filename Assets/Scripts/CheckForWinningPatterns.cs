@@ -292,7 +292,7 @@ public class CheckForWinningPatterns : MonoBehaviour
                         detected = new List<Vector3>();
                         detected.Add(detectedObject.transform.position);
                     }
-                    if (matchCount >= 3 && i == transformList.Count - 1)        
+                    if (matchCount == 3 && i == transformList.Count - 1)        
                     {
                         noOfPatterns++;
                         Debug.Log(detectedObject.transform.localPosition + " matched " + prevSprite);

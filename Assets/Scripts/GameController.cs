@@ -296,7 +296,14 @@ public class GameController : MonoBehaviour
         Destroy(winningFx, 4f);
 
         _patterns = new();
+        
+        StartCoroutine(OnPatternFound(true));
 
+    }
+    private IEnumerator OnPatternFound(bool diffrentiate)
+    {
+        yield return 2f;
+        GameController.Instance.RestartLevel.gameObject.SetActive(true);
     }
 
     public void FinaliseBetOnClickSpin()

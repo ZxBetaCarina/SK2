@@ -7753,7 +7753,7 @@ MonoBehaviour:
   reviewBtn: {fileID: 120769701}
   reviewText: {fileID: 648294595}
   bonus1: {fileID: 21300000, guid: 2952f468bc74fa34b9c4e3b57090e57b, type: 3}
-  bonus2: {fileID: 0}
+  bonus2: {fileID: 21300000, guid: 4d32f6cb408ae5b4ea61da42cfa6325f, type: 3}
   isBonus: 0
 --- !u!1 &648294593
 GameObject:
@@ -8769,7 +8769,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1471615804}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 2
+  m_MaxValue: 1
   m_WholeNumbers: 1
   m_Value: 1
   m_OnValueChanged:
@@ -9788,21 +9788,21 @@ MonoBehaviour:
     - Item: {fileID: 1392617881745507993, guid: 928a7c091fbe5d0428c28b2dd6de2098, type: 3}
       Probability: 500
     - Item: {fileID: 4424986425343659311, guid: 7c515bdfa70d9cc4baf27dd56f42c3dd, type: 3}
-      Probability: 40
+      Probability: 0
     - Item: {fileID: 4456721412420583807, guid: 5a2bbbcae54a4d74a970533fc4d3a2eb, type: 3}
-      Probability: 40
+      Probability: 0
     - Item: {fileID: 7066974137551870429, guid: 66539358aa570c2469010fae7331cfa1, type: 3}
-      Probability: 40
+      Probability: 0
     - Item: {fileID: 3334226191018852170, guid: 2e8eb427d1f5ea44995c54fdd7cff2f4, type: 3}
-      Probability: 40
+      Probability: 0
     - Item: {fileID: 4851021996735693295, guid: 1dcfa3e32f96d214d9c4e9dd32c06ca8, type: 3}
-      Probability: 60
+      Probability: 0
     - Item: {fileID: 7772456005752476066, guid: 34684f10dacadc44787bd910d853e63a, type: 3}
-      Probability: 60
+      Probability: 0
     - Item: {fileID: 6975359494690410145, guid: e2f441ae831289842ad4897226b7a4c4, type: 3}
-      Probability: 60
+      Probability: 0
     - Item: {fileID: 9161979890128498704, guid: ce54b204d1e1f8e48be55bcb55f2ed99, type: 3}
-      Probability: 60
+      Probability: 0
   jackpotRNGItems:
     ItemsForRNG:
     - Item: 2
@@ -15838,7 +15838,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -20.990988, y: -30.8048}
+  m_AnchoredPosition: {x: 1, y: -30.8048}
   m_SizeDelta: {x: 89.2698, y: 13.1473}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1070452718

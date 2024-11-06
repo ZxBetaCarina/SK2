@@ -491,7 +491,7 @@ public class ImageCylinderSpawner : MonoBehaviour
 
         print(currentSpinJackpot);
 
-        if (currentSpinJackpot != JackpotTypes.None)
+        /*if (currentSpinJackpot != JackpotTypes.None)
         {
             List<SpriteRenderer> slots = new List<SpriteRenderer>();
 
@@ -536,7 +536,7 @@ public class ImageCylinderSpawner : MonoBehaviour
                     break;
 
             }
-        }
+        }*/
         StartRotatingCylinders();
         StartCoroutine(StopCylindersSequentially()); // Start stopping the cylinders sequentially
     }

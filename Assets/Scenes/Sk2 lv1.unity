@@ -2568,7 +2568,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 100
+  m_text: 50
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3514,7 +3514,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 50
+  m_text: 10
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -7753,6 +7753,7 @@ MonoBehaviour:
   reviewBtn: {fileID: 120769701}
   reviewText: {fileID: 648294595}
   bonus1: {fileID: 21300000, guid: 2952f468bc74fa34b9c4e3b57090e57b, type: 3}
+  bonus2: {fileID: 0}
   isBonus: 0
 --- !u!1 &648294593
 GameObject:
@@ -11911,12 +11912,12 @@ MonoBehaviour:
   _grand_prize_text: {fileID: 2082464330}
   _major_prize_text: {fileID: 210340169}
   _minor_prize_text: {fileID: 307407169}
-  _grand_prize_value: 150
-  _major_prize_value: 100
-  _minor_prize_value: 50
-  _grand_prize_initial_value: 150
-  _major_prize_initial_value: 100
-  _minor_prize_initial_value: 50
+  _grand_prize_value: 100
+  _major_prize_value: 50
+  _minor_prize_value: 10
+  _grand_prize_initial_value: 100
+  _major_prize_initial_value: 50
+  _minor_prize_initial_value: 10
   _temporaryDataStorage: {fileID: 11400000, guid: f0ba746b543d51a4a91d4c51e7f14a75, type: 2}
   _increase_bet_button: {fileID: 2047289059}
   _decrease_bet_button: {fileID: 453209961}
@@ -30177,7 +30178,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 150
+  m_text: 100
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

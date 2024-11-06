@@ -27,7 +27,7 @@ public class ImageCylinderSpawner : MonoBehaviour
     public float cylinderRadius = 5f;
     public int numberOfCylinders = 3; // Update the number of cylinders
     public float rotationSpeed = 50f;
-    public float CylinderStopInterval = 2f;
+    public float CylinderStopInterval = 1f;
     public float distanceBetweenCylinders = 2f;  // Distance between cylinders
     public float[] rotations;
     public bool _isRotating = false;

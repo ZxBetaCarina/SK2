@@ -27,6 +27,7 @@ public class ImageCylinderSpawner : MonoBehaviour
     public float cylinderRadius = 5f;
     public int numberOfCylinders = 3; // Update the number of cylinders
     public float rotationSpeed = 50f;
+    public float CylinderStopInterval = 2f;
     public float distanceBetweenCylinders = 2f;  // Distance between cylinders
     public float[] rotations;
     public bool _isRotating = false;
@@ -122,7 +123,7 @@ public class ImageCylinderSpawner : MonoBehaviour
         allCylindersParent.transform.localPosition = Vector3.zero;
 
         // Add a listener to the slider
-        speedSlider.onValueChanged.AddListener(ChangeRotationSpeed);
+        speedSlider.onValueChanged.AddListener(CylinderStopSpeed);
         // Add a listener to the mute button
         muteButton.onClick.AddListener(ToggleMute);
 
@@ -863,6 +864,12 @@ public class ImageCylinderSpawner : MonoBehaviour
     }
 
     #endregion
+    void CylinderStopSpeed(float newSpeed)
+    {
+        CylinderStopInterval = newSpeed;
+        // Update the speed text
+        speedText.text = $"Delay: {CylinderStopInterval}";
+    }
 
     IEnumerator StopCylindersSequentially()
     {
@@ -877,7 +884,7 @@ public class ImageCylinderSpawner : MonoBehaviour
             //cylinderRotationStates[i] = false;
 
             // Delay for a short duration before stopping the next cylinder
-            yield return new WaitForSeconds(2.0f); // Adjust the duration as needed
+            yield return new WaitForSeconds(CylinderStopInterval); // Adjust the duration as needed
 
             // Check for collisions with centerpoint
             if (_currentCylinder < numberOfCylinders)
@@ -917,6 +924,7 @@ public class ImageCylinderSpawner : MonoBehaviour
         // Update the speed text
         speedText.text = $"Speed: {rotationSpeed}";
     }
+    
 
     void UpdateCoinsText()
     {

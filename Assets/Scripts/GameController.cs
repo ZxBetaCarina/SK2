@@ -302,7 +302,7 @@ public class GameController : MonoBehaviour
     }
     private IEnumerator OnPatternFound(bool diffrentiate)
     {
-        yield return 2f;
+        yield return 4f;
         GameController.Instance.RestartLevel.gameObject.SetActive(true);
     }
 

@@ -242,8 +242,78 @@ public class CheckForWinningPatterns : MonoBehaviour
             StartCoroutine(CheckForPatterns());
         }
     }
-
     private void CheckPatternsInList(List<Transform> transformList)
+{
+    int matchCount = 0;
+    Sprite prevSprite = null;
+    List<Vector3> detected = new List<Vector3>();
+
+    for (int i = 0; i < transformList.Count; i++)
+    {
+        if (!transformList[i].gameObject.activeInHierarchy) continue;
+
+        RaycastHit2D detectedObject = Physics2D.Raycast(transformList[i].position, Vector3.forward);
+
+        if (detectedObject.transform != null)
+        {
+            Sprite currentSprite = detectedObject.collider.GetComponent<SpriteRenderer>().sprite;
+
+            // Check if starting new pattern or continuing an existing one
+            if (matchCount == 0 || prevSprite == currentSprite)
+            {
+                matchCount++;
+                detected.Add(detectedObject.transform.position);
+                prevSprite = currentSprite;
+            }
+            else
+            {
+                // Reset if sprites don’t match
+                matchCount = 1;
+                prevSprite = currentSprite;
+                detected = new List<Vector3> { detectedObject.transform.position };
+            }
+
+            // Confirm pattern only if exactly 3 consecutive matches
+            if (matchCount == 3)
+            {
+                noOfPatterns++;
+                Debug.Log($"Pattern of 3 found with sprite {prevSprite}");
+
+                // Handle special sprites for bonus logic
+                if (prevSprite == bonus1)
+                {
+                    StartCoroutine(DelayFreeSpin());
+                }
+                else if (prevSprite == bonus2)
+                {
+                    StartCoroutine(Bonus2start());
+                }
+                else
+                {
+                    foreach (var pattern in detected)
+                    {
+                        GameController.Instance._patterns.Add(pattern);
+                        Debug.Log("Pattern Found");
+                    }
+                }
+
+                // Reset to allow detection of additional patterns
+                matchCount = 0;
+                detected.Clear();
+            }
+        }
+        else
+        {
+            // Reset if no object detected in raycast
+            matchCount = 0;
+            detected.Clear();
+            prevSprite = null;
+        }
+    }
+}
+
+
+    /*private void CheckPatternsInList(List<Transform> transformList)
     {
         int matchCount = 0;
         Sprite prevSprite = null;
@@ -322,7 +392,7 @@ public class CheckForWinningPatterns : MonoBehaviour
                 }
             }
         }
-    }
+    }*/
 
     
     private IEnumerator Bonus2start()

@@ -9777,6 +9777,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33ef3adb56615804487beb8959f2ff66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  checkForWinningPatterns: {fileID: 641386773}
   slotRNGItems:
     ItemsForRNG:
     - Item: {fileID: 3006844835349394465, guid: f597f5f8ec9732c4291a76fbe27cc3f2, type: 3}
@@ -9816,6 +9817,11 @@ MonoBehaviour:
     - Item: 0
       Probability: 500
   jackpotOccurPosition:
+  - {fileID: 541799898}
+  - {fileID: 999525428}
+  - {fileID: 1786570247}
+  - {fileID: 244549817}
+  jackpotOccurPositionBackup:
   - {fileID: 541799898}
   - {fileID: 999525428}
   - {fileID: 1786570247}

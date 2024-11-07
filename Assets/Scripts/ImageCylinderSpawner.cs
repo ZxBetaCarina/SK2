@@ -6,29 +6,38 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class ImageCylinderSpawner : MonoBehaviour
 {
-    [Header("RNG")]
-    [SerializeField] private WeightedRNG<GameObject> slotRNGItems;
+    [SerializeField] private CheckForWinningPatterns checkForWinningPatterns;
+    
+    [Header("RNG")] [SerializeField] private WeightedRNG<GameObject> slotRNGItems;
     [SerializeField] private WeightedRNG<JackpotTypes> jackpotRNGItems;
-    [SerializeField, Tooltip("These are the spots where jackpot occurs if we hit one")] private List<Transform> jackpotOccurPosition;
 
-    [Header("Cylinder Data")]
-    [SerializeField] private Vector3 _position;
+    [SerializeField, Tooltip("These are the spots where jackpot occurs if we hit one")]
+    private List<Transform> jackpotOccurPosition;
+
+    [SerializeField, Tooltip("These are the spots where jackpot occurs if we hit one")]
+    private List<Transform> jackpotOccurPositionBackup;
+
+    [Header("Cylinder Data")] [SerializeField]
+    private Vector3 _position;
+
     [SerializeField] private GameObject _shiftingPanel;
 
-    [Header("Slot Image Cylinder")]
-    [SerializeField] private LayerMask _imageLayer;
-    public GameObject[] imagePrefabs;  // Array to hold different sets of image prefabs
+    [Header("Slot Image Cylinder")] [SerializeField]
+    private LayerMask _imageLayer;
+
+    public GameObject[] imagePrefabs; // Array to hold different sets of image prefabs
     public int numberOfImages = 21;
     public float cylinderRadius = 5f;
     public int numberOfCylinders = 3; // Update the number of cylinders
     public float rotationSpeed = 50f;
     public float CylinderStopInterval = 1f;
-    public float distanceBetweenCylinders = 2f;  // Distance between cylinders
+    public float distanceBetweenCylinders = 2f; // Distance between cylinders
     public float[] rotations;
     public bool _isRotating = false;
     public Transform[] cylinderParents;
@@ -41,18 +50,23 @@ public class ImageCylinderSpawner : MonoBehaviour
     private Icons[] _spawnedIcons;
     [SerializeField] private float _swapSpeed;
 
-    public Icons[] GetSpawnedIcons { get => _spawnedIcons; }
+    public Icons[] GetSpawnedIcons
+    {
+        get => _spawnedIcons;
+    }
 
     public int _currentCylinder = 0;
 
     public AudioSource slotAudio;
-    private GameObject allCylindersParent;  // New parent for all cylinders
+    private GameObject allCylindersParent; // New parent for all cylinders
 
-    public Slider speedSlider;  // Reference to the UI slider for speed adjustment
-    public TMP_Text speedText;  // Reference to the UI text for displaying speed
+    public Slider speedSlider; // Reference to the UI slider for speed adjustment
+
+    public TMP_Text speedText; // Reference to the UI text for displaying speed
+
     //public TMP_Text coinsText;  // Reference to the UI text for displaying coins
-    public Button muteButton;  // Reference to the UI button for muting/unmuting
-    public bool isMuted = false;  // Flag to track whether the game is currently muted
+    public Button muteButton; // Reference to the UI button for muting/unmuting
+    public bool isMuted = false; // Flag to track whether the game is currently muted
     public GameObject fxPrefab;
     public GameObject spinButtonDup;
 
@@ -62,12 +76,13 @@ public class ImageCylinderSpawner : MonoBehaviour
     public int _difficultyFactor = 0;
     public bool CylinderSpawning = false;
 
-    public GameObject popupPanel;  // Assign the pop-up panel in the Inspector
-                                   // public TMP_Text popupText;  // Assign the Text element for the message
-    public Button closeButton;  // Assign the Button element for closing the pop-up
+    public GameObject popupPanel; // Assign the pop-up panel in the Inspector
+
+    // public TMP_Text popupText;  // Assign the Text element for the message
+    public Button closeButton; // Assign the Button element for closing the pop-up
     private bool checkedForPatterns = false;
     public Button refreshBtn;
-    public static ImageCylinderSpawner INSTANCE;        //Singleton Instance
+    public static ImageCylinderSpawner INSTANCE; //Singleton Instance
     private bool _betConfirmed = false;
     public bool won = false;
 
@@ -96,6 +111,7 @@ public class ImageCylinderSpawner : MonoBehaviour
         {
             INSTANCE = this;
         }
+
         _spawnedIcons = new Icons[numberOfImages];
         _cylinderInitialPos = transform.localPosition;
     }
@@ -105,14 +121,16 @@ public class ImageCylinderSpawner : MonoBehaviour
         GameController.BetChanged += OnBetChanged;
         PatternDetector.PatternNotFound += OnPatternNotFound;
     }
+
     private void OnDisable()
     {
         GameController.BetChanged -= OnBetChanged;
         PatternDetector.PatternNotFound -= OnPatternNotFound;
     }
+
     void Start()
     {
-        allCylindersParent = new GameObject("AllCylindersParent");  // Create a new empty GameObject as the parent
+        allCylindersParent = new GameObject("AllCylindersParent"); // Create a new empty GameObject as the parent
 
         cylinderParents = new Transform[numberOfCylinders];
 
@@ -174,6 +192,7 @@ public class ImageCylinderSpawner : MonoBehaviour
                 StartCoroutine(DoorAnim.INSTANCE.DoorTrigger());
                 OnStartSpinning();
             }
+
             if (fxPrefab != null)
             {
                 // Instantiate the FX Prefab at the button's position
@@ -200,7 +219,8 @@ public class ImageCylinderSpawner : MonoBehaviour
                     if (collider.CompareTag("centerpoint"))
                     {
                         // Check for collisions with the centerpoint
-                        Collider[] symbolColliders = Physics.OverlapBox(collider.transform.position, collider.bounds.extents);
+                        Collider[] symbolColliders =
+                            Physics.OverlapBox(collider.transform.position, collider.bounds.extents);
                         foreach (Collider symbolCollider in symbolColliders)
                         {
                             // Adjust the rotation to align the symbol with the center
@@ -248,7 +268,9 @@ public class ImageCylinderSpawner : MonoBehaviour
         _spinButton.interactable = false;
         print("Turn OFF SPIN in Rotating");
         //  check if balance is sufficient, done to remove dependence on gamecontroller -> isbalancesufficient
-        float t_balance_after_test = PlayerPrefs.GetFloat(GameController.Instance._playerprefs_balance_key) - GameController.Instance._bet_intervals_in_usd[GameController.Instance._current_bet_index];
+        float t_balance_after_test = PlayerPrefs.GetFloat(GameController.Instance._playerprefs_balance_key) -
+                                     GameController.Instance._bet_intervals_in_usd[
+                                         GameController.Instance._current_bet_index];
 
         //if (!GameController.Instance.Is_Balance_Sufficient)
         if (t_balance_after_test < 0)
@@ -272,7 +294,8 @@ public class ImageCylinderSpawner : MonoBehaviour
             GameController.Instance._currentPoints = t_balance_after_test;
             PlayerPrefs.SetFloat("Balance", GameController.Instance._currentPoints);
 
-            GameController.Instance._display_points = (int)Mathf.Round(GameController.Instance._currentPoints * GameController.Instance._point_multiplier);
+            GameController.Instance._display_points = (int)Mathf.Round(GameController.Instance._currentPoints *
+                                                                       GameController.Instance._point_multiplier);
             print(GameController.Instance._currentPoints);
 
             //GameController.Instance._currentPointsText.text = t_balance_after_test.ToString();
@@ -295,6 +318,7 @@ public class ImageCylinderSpawner : MonoBehaviour
         hideImage4.SetActive(false);
         hideImage5.SetActive(false);
     }
+
     public void EnableRevealImages()
     {
         hideImage.SetActive(true);
@@ -304,6 +328,7 @@ public class ImageCylinderSpawner : MonoBehaviour
         hideImage4.SetActive(true);
         hideImage5.SetActive(true);
     }
+
     internal void RefreshCylinder()
     {
         if (cylinderParents.Length > 0)
@@ -317,9 +342,11 @@ public class ImageCylinderSpawner : MonoBehaviour
                         Destroy(child.gameObject);
                     }
                 }
+
                 Destroy(parent.gameObject);
             }
         }
+
         Vector3 spawnPosition = new Vector3(0, distanceBetweenCylinders, 0);
         for (int i = 0; i < numberOfCylinders; i++)
         {
@@ -331,7 +358,7 @@ public class ImageCylinderSpawner : MonoBehaviour
     void SpawnCylinders()
     {
         //refreshBtn.gameObject.SetActive(true);
-        Vector3 spawnPosition = new Vector3(0, distanceBetweenCylinders, 0);       
+        Vector3 spawnPosition = new Vector3(0, distanceBetweenCylinders, 0);
 
         for (int i = 0; i < numberOfCylinders; i++)
         {
@@ -350,6 +377,7 @@ public class ImageCylinderSpawner : MonoBehaviour
         {
             parent.SetParent(allCylindersParent.transform);
         }
+
         allCylindersParent.transform.position = new Vector3(3.5f, 0, 4.5f);
         allCylindersParent.transform.rotation = Quaternion.Euler(0, 0, +90);
 
@@ -362,8 +390,8 @@ public class ImageCylinderSpawner : MonoBehaviour
 
         GameObject cylinderParent = new GameObject("CylinderParent" + index);
         //cylinderParent.transform.position = cylinderSpawnPoints[index];
-        cylinderParents[index] = cylinderParent.transform;  // Store the reference to the parent
-        cylinderRotationStates[index] = true;  // Set the initial rotation state to true
+        cylinderParents[index] = cylinderParent.transform; // Store the reference to the parent
+        cylinderRotationStates[index] = true; // Set the initial rotation state to true
 
         // Set the parent transform for the cylinder
         cylinderParent.transform.SetParent(parentTransform);
@@ -373,25 +401,30 @@ public class ImageCylinderSpawner : MonoBehaviour
             float x = Mathf.Sin(Mathf.Deg2Rad * angle) * cylinderRadius;
             float z = Mathf.Cos(Mathf.Deg2Rad * angle) * cylinderRadius;
 
-            Vector3 imageSpawnPosition = spawnPosition + new Vector3(x, 0f, z);  // Offset image position relative to cylinder
+            Vector3 imageSpawnPosition =
+                spawnPosition + new Vector3(x, 0f, z); // Offset image position relative to cylinder
             Quaternion spawnRotation = Quaternion.Euler(0f, -angle, 0f);
 
             //    ServiceLocator.Instance.Get<RngGenerator>().RandInt(0, imagePrefabs.Length - 5 + GameController.Instance.CurrentBetIndex, (int)(i * (spawnPosition.x + spawnPosition.y + spawnPosition.z) / 2));
 
-            GameObject imageObject = Instantiate(imagePrefabs[Random.Range(0, imagePrefabs.Length)], imageSpawnPosition, spawnRotation);
+            GameObject imageObject = Instantiate(imagePrefabs[Random.Range(0, imagePrefabs.Length)], imageSpawnPosition,
+                spawnRotation);
             // GameObject imageObject = Instantiate(GetWeightedRNG.GetValue(slotRNGItems.ItemsForRNG), imageSpawnPosition, spawnRotation);
             imageObject.GetComponent<SpriteRenderer>().maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
             _spawnedIcons[i] = imageObject.GetComponent<Icons>();
-            imageObject.transform.parent = cylinderParent.transform;  // Set the cylinder's parent as the parent
+            imageObject.transform.parent = cylinderParent.transform; // Set the cylinder's parent as the parent
 
             // Calculate the angle between the center and the current image
-            float angleToCenter = Mathf.Atan2(imageSpawnPosition.z - spawnPosition.z, imageSpawnPosition.x - spawnPosition.x) * Mathf.Rad2Deg;
+            float angleToCenter =
+                Mathf.Atan2(imageSpawnPosition.z - spawnPosition.z, imageSpawnPosition.x - spawnPosition.x) *
+                Mathf.Rad2Deg;
             // Rotate the image to face the center
             imageObject.transform.rotation = Quaternion.Euler(180, 90 - angleToCenter, 90);
         }
+
         Debug.Log("Spawn " + gameObject);
-        cylinderParent.transform.localPosition = Vector3.zero;  // Set local position to zero
-        cylinderParent.transform.localRotation = Quaternion.identity;  // Set local rotation to identity
+        cylinderParent.transform.localPosition = Vector3.zero; // Set local position to zero
+        cylinderParent.transform.localRotation = Quaternion.identity; // Set local rotation to identity
         cylinderParents[index].localScale = new Vector3(1, 1, 1);
     }
 
@@ -418,7 +451,8 @@ public class ImageCylinderSpawner : MonoBehaviour
                     closest = element;
                 }
             }
-            cylinderRotationStates[stopCylinderAtIndex] = false;  // Stop the rotation for the current cylinder
+
+            cylinderRotationStates[stopCylinderAtIndex] = false; // Stop the rotation for the current cylinder
             cylinderParents[stopCylinderAtIndex].localRotation = Quaternion.Euler(0, closest, 0);
 
             bool isEnd = true;
@@ -467,7 +501,8 @@ public class ImageCylinderSpawner : MonoBehaviour
                     closest = element;
                 }
             }
-            cylinderRotationStates[_currentCylinder] = false;  // Stop the rotation for the current cylinder
+
+            cylinderRotationStates[_currentCylinder] = false; // Stop the rotation for the current cylinder
             cylinderParents[_currentCylinder].localRotation = Quaternion.Euler(0, closest, 0);
 
             if (currentSpinJackpot != JackpotTypes.None)
@@ -492,9 +527,11 @@ public class ImageCylinderSpawner : MonoBehaviour
 
         print(currentSpinJackpot);
 
-        /*if (currentSpinJackpot != JackpotTypes.None)
+        if (currentSpinJackpot != JackpotTypes.None)
         {
             List<SpriteRenderer> slots = new List<SpriteRenderer>();
+            
+            FillOrigins();
 
             foreach (Transform raycastPoint in jackpotOccurPosition)
             {
@@ -511,7 +548,7 @@ public class ImageCylinderSpawner : MonoBehaviour
                 }
             }
 
-            switch (currentSpinJackpot)                                                                 //Allign sprites in a line to match
+            switch (currentSpinJackpot) //Allign sprites in a line to match
             {
                 case JackpotTypes.Minor:
 
@@ -535,18 +572,30 @@ public class ImageCylinderSpawner : MonoBehaviour
                     ModifySprites(slotRNGItems.ItemsForRNG[1].Item.GetComponent<SpriteRenderer>().sprite, slots);
 
                     break;
-
             }
-        }*/
+        }
+
         StartRotatingCylinders();
         StartCoroutine(StopCylindersSequentially()); // Start stopping the cylinders sequentially
+    }
+
+    private void FillOrigins()
+    {
+        //todo get positions random here
+        jackpotOccurPosition.Clear();
+        var randomInt = Random.Range(0, checkForWinningPatterns.raycastPatterns.Count);
+        var element = checkForWinningPatterns.raycastPatterns[randomInt];
+        foreach (var origins in element.raycastOrigins)
+        {
+            jackpotOccurPosition.Add(origins);
+        }
     }
 
     private void OnEndSpinning()
     {
         if (_isRotating)
         {
-            if(!CheckForWinningPatterns.INSTANCE.isBonus)
+            if (!CheckForWinningPatterns.INSTANCE.isBonus)
                 StartCoroutine(DoorAnim.INSTANCE.DoorTrigger());
         }
 
@@ -599,6 +648,7 @@ public class ImageCylinderSpawner : MonoBehaviour
             cylinderRotationStates[i] = true;
             //AlignSymbolWithClosestCenter(i);
         }
+
         _spinButton.gameObject.SetActive(false);
 
         //TODO:Winning Checked Here
@@ -646,7 +696,8 @@ public class ImageCylinderSpawner : MonoBehaviour
         if (CanShiftCylinder && !DoorAnim.INSTANCE.IsAnimRunning)
         {
             _shiftingPanel.SetActive(false);
-            cylinderParents[cylinderCount].localRotation = Quaternion.AngleAxis(360 / numberOfImages, Vector3.down) * cylinderParents[cylinderCount].localRotation;
+            cylinderParents[cylinderCount].localRotation = Quaternion.AngleAxis(360 / numberOfImages, Vector3.down) *
+                                                           cylinderParents[cylinderCount].localRotation;
             //for (float i = 0; i <= 1; i += 0.01f)
             //{
             //    if (!Application.isPlaying)
@@ -768,6 +819,7 @@ public class ImageCylinderSpawner : MonoBehaviour
             CheckWinningCondition();
         }
     }
+
     /*
     IEnumerator Cor_Shift_Left()
     {
@@ -848,7 +900,8 @@ public class ImageCylinderSpawner : MonoBehaviour
         if (CanShiftCylinder && !DoorAnim.INSTANCE.IsAnimRunning)
         {
             _shiftingPanel.SetActive(false);
-            cylinderParents[cylinderCount].localRotation = Quaternion.AngleAxis(360 / numberOfImages, Vector3.up) * cylinderParents[cylinderCount].localRotation;
+            cylinderParents[cylinderCount].localRotation = Quaternion.AngleAxis(360 / numberOfImages, Vector3.up) *
+                                                           cylinderParents[cylinderCount].localRotation;
             //for (float i = 0; i <= 1; i += 0.01f)
             //{
             //    if (!Application.isPlaying)
@@ -864,6 +917,7 @@ public class ImageCylinderSpawner : MonoBehaviour
     }
 
     #endregion
+
     void CylinderStopSpeed(float newSpeed)
     {
         CylinderStopInterval = newSpeed;
@@ -901,7 +955,8 @@ public class ImageCylinderSpawner : MonoBehaviour
                         closest = element;
                     }
                 }
-                cylinderRotationStates[_currentCylinder] = false;  // Stop the rotation for the current cylinder
+
+                cylinderRotationStates[_currentCylinder] = false; // Stop the rotation for the current cylinder
                 cylinderParents[_currentCylinder].localRotation = Quaternion.Euler(0, closest, 0);
 
                 if (currentSpinJackpot != JackpotTypes.None)
@@ -918,22 +973,24 @@ public class ImageCylinderSpawner : MonoBehaviour
             }
         }
     }
+
     void ChangeRotationSpeed(float newSpeed)
     {
         rotationSpeed = newSpeed;
         // Update the speed text
         speedText.text = $"Speed: {rotationSpeed}";
     }
-    
+
 
     void UpdateCoinsText()
     {
         // Update the coins text
         //coinsText.text = $"Coins: {coins}";
     }
+
     void ToggleMute()
     {
-        isMuted = !isMuted;  // Toggle the mute state
+        isMuted = !isMuted; // Toggle the mute state
 
         // Adjust the volume based on the mute state
         AudioListener.volume = isMuted ? 0.1f : 1.0f;
@@ -941,10 +998,12 @@ public class ImageCylinderSpawner : MonoBehaviour
         // Update the button text
         muteButton.GetComponentInChildren<Text>().text = isMuted ? "Unmute" : "Mute";
     }
+
     public void ChangeScene()
     {
         SceneManager.LoadScene(nextSceneName);
     }
+
     public void ShowPopup(string message)
     {
         //  popupText.text = message;
@@ -969,6 +1028,7 @@ public class ImageCylinderSpawner : MonoBehaviour
             }
         }
     }
+
     public void RefreshImagesAgain()
     {
         if (!_isRotating)
@@ -986,11 +1046,14 @@ public class ImageCylinderSpawner : MonoBehaviour
                         {
                             child.gameObject.SetActive(true);
                         }
+
                         child.gameObject.AddComponent<Rigidbody2D>();
                         Destroy(child.gameObject, 2f);
                     }
+
                     Destroy(parent.gameObject, 2f);
                 }
+
                 transform.localPosition = _cylinderInitialPos;
                 SpawnCylinders();
 
@@ -998,6 +1061,7 @@ public class ImageCylinderSpawner : MonoBehaviour
             }
         }
     }
+
     private IEnumerator RefreshImagesFX()
     {
         //destroy previous images fx
@@ -1009,11 +1073,14 @@ public class ImageCylinderSpawner : MonoBehaviour
                 {
                     child.gameObject.SetActive(true);
                 }
+
                 child.gameObject.AddComponent<Rigidbody2D>();
                 Destroy(child.gameObject, 2f);
             }
+
             Destroy(parent.gameObject, 2f);
         }
+
         yield return new WaitForSeconds(2);
         //create new images fx
         // Spawn new image symbols inside allCylindersParent
@@ -1025,8 +1092,8 @@ public class ImageCylinderSpawner : MonoBehaviour
             SpawnImagesOnCylinder(spawnPosition, i, allCylindersParent.transform);
             spawnPosition += new Vector3(0f, distanceBetweenCylinders, 0f);
         }
-        CylinderSpawning = false;
 
+        CylinderSpawning = false;
     }
 
     public void CheckWinningCondition()
@@ -1056,11 +1123,7 @@ public class ImageCylinderSpawner : MonoBehaviour
         yield return StartCoroutine(StopCylindersSequentially());
 
 
-
         yield return null;
         bonusSpins = false;
     }
 }
-
-
-

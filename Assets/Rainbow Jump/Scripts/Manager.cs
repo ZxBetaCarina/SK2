@@ -34,6 +34,7 @@ namespace RainbowJump.Scripts
         public GameObject tapToStartBtn;
         public GameObject settingsButton;
         public GameObject settingsButtons;
+        public GameObject RestartButtons;
         public SettingsButton settingsButtonScript;
 
         public AudioClip tapSound;
@@ -55,10 +56,11 @@ namespace RainbowJump.Scripts
             RestartGame();
 
             // Load the high score from PlayerPrefs and display it in the UI
-            highScore = PlayerPrefs.GetFloat("HighScore", 0f);
-            highScoreText.text = "High Score: " + highScore.ToString("0");
+            //highScore = PlayerPrefs.GetFloat("HighScore", 0f);
+            highScoreText.text = "Score: " + highScore.ToString("0");
             
         }
+        
 
         // Update is called once per frame
         void Update()
@@ -78,8 +80,8 @@ namespace RainbowJump.Scripts
                 if (score > highScore)
                 {
                     highScore = score;
-                    PlayerPrefs.SetFloat("HighScore", highScore);
-                    highScoreText.text = "High Score: " + highScore.ToString("0");
+                    //PlayerPrefs.SetFloat("HighScore", highScore);
+                    highScoreText.text = "Score: " + highScore.ToString("0");
                 }
             }
 

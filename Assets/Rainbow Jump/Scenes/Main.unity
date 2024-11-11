@@ -1813,6 +1813,7 @@ MonoBehaviour:
   tapToStartBtn: {fileID: 869681175}
   settingsButton: {fileID: 1144075107}
   settingsButtons: {fileID: 1477827947}
+  RestartButtons: {fileID: 14633812}
   settingsButtonScript: {fileID: 1144075109}
   tapSound: {fileID: 8300000, guid: 29bde6326b4c34ad8a12da475f79b50a, type: 3}
   deathSound: {fileID: 8300000, guid: b9eff218e132a4e76be78840eca96fb2, type: 3}

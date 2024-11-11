@@ -55,6 +55,9 @@ public class GameController : MonoBehaviour
     [SerializeField] private float _jackPotModeWinningMultiple;
     [SerializeField] private AudioSource _winningAudio;
     [SerializeField] private GameObject _jackpotModepanel;
+    
+    [SerializeField] private Sprite bonus1;
+    [SerializeField] private Sprite bonus2;
     [field: SerializeField] public Button RestartLevel { get; private set; }
 
     public bool Is_Balance_Sufficient
@@ -312,14 +315,19 @@ public class GameController : MonoBehaviour
         Destroy(winningFx, 4f);
 
         _patterns = new();
-        
-        StartCoroutine(OnPatternFound(true));
+        if (CheckForWinningPatterns.INSTANCE.WinningIconName == bonus1)
+        {
+            RestartLevel.gameObject.SetActive(false);
+        }
+        else if (CheckForWinningPatterns.INSTANCE.WinningIconName == bonus2)
+        {
+            
+        }
+        else
+        {
+            RestartLevel.gameObject.SetActive(true);
+        }
 
-    }
-    private IEnumerator OnPatternFound(bool diffrentiate)
-    {
-        yield return 4f;
-        GameController.Instance.RestartLevel.gameObject.SetActive(true);
     }
 
     public void FinaliseBetOnClickSpin()

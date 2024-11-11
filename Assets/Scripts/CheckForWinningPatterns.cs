@@ -280,11 +280,13 @@ public class CheckForWinningPatterns : MonoBehaviour
             {
                 noOfPatterns++;
                 WinningIconName = prevSprite;
+                Debug.Log($"''''''''''''''''''''''''''''''''''''''' {WinningIconName}");
                 
 
                 // Handle special sprites for bonus logic
                 if (prevSprite == bonus1)
                 {
+                    GameController.Instance.RestartLevel.gameObject.SetActive(false);
                     StartCoroutine(DelayFreeSpin());
                 }
                 else if (prevSprite == bonus2)

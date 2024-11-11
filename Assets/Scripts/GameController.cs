@@ -171,6 +171,22 @@ public class GameController : MonoBehaviour
                 timerText.text = "";
             }
         }
+        if (_current_bet_index == 0)
+        {
+            _decrease_bet_button.interactable = false;
+            _increase_bet_button.interactable = true;
+        }
+        else if (_current_bet_index == 5)
+        {
+            _decrease_bet_button.interactable = true;
+            _increase_bet_button.interactable = false;
+        }
+        else
+        {
+            _decrease_bet_button.interactable = true;
+            _increase_bet_button.interactable = true;
+        }
+        
     }
 
     void AvailableCredit()
@@ -518,6 +534,7 @@ public class GameController : MonoBehaviour
             }
         }
     }*/
+    
 
     public void InitiateBet()
     {

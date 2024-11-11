@@ -42,7 +42,7 @@ namespace RainbowJump.Scripts
         public AudioClip buttonSound;
         private AudioSource audioSource;
         
-
+        private float previousYPosition = 0f;
 
         // Start is called before the first frame update
         void Start()
@@ -80,19 +80,20 @@ namespace RainbowJump.Scripts
                 if (score > highScore)
                 {
                     highScore = score;
-                    //PlayerPrefs.SetFloat("HighScore", highScore);
                     highScoreText.text = "Score: " + highScore.ToString("0");
                 }
             }
 
-            // Update the score to be the highest player's y position in the current game session
-            if (playerTransform.position.y > score)
+            // Update the score based on the player's current position
+            if (playerTransform.position.y > previousYPosition)
             {
-                score = playerTransform.position.y;
+                float scoreIncrease = playerTransform.position.y - previousYPosition;
+                score += scoreIncrease / 4;  // Divide the score increase by 4
+                previousYPosition = playerTransform.position.y;  // Update the previous position
             }
 
-            // Display the score as the highest player's y position minus 3
-            scoreText.text = (score).ToString("0");
+            // Display the score
+            scoreText.text = score.ToString("0");
         }
 
         public void TapToStart()

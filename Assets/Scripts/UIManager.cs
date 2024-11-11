@@ -1,3 +1,4 @@
+using System;
 using SK2;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,9 +7,17 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+[Serializable]
+public class PrizeLevels
+{
+    public string PrizeName;
+    public List<GameObject> Icons;
+}
 public class UIManager : MonoBehaviour
 {
+    
     public static UIManager Instance { get; private set; }
+    public List<PrizeLevels> PrizeLevelsList;
 
     [SerializeField, Tooltip("Panel shown if available balance insuffiecient")] private GameObject balanceInsuffucientPanel;
     [SerializeField] private float balanceInsuffucientPanelActiveForSec;
@@ -40,6 +49,8 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] private ReadCube _readCube;
     [SerializeField] private CubeState _cubeState;
+
+    private Sprite WinningSpriteName;
 
     private void Awake()
     {
@@ -225,8 +236,11 @@ public class UIManager : MonoBehaviour
         if (!CheckForWinningPatterns.INSTANCE.isBonus)
         {
             StartCoroutine(nameof(SetWinningPanelActive), _winningMsg);
+            CheckCurrentSprite();
         }
         //StopCoroutine(WaitForUserInput());
+        
+
     }
 
     private IEnumerator SetWinningPanelActive(string text)
@@ -284,5 +298,30 @@ public class UIManager : MonoBehaviour
     {
         SceneManager.LoadScene(index);
     }
+    public void CheckCurrentSprite()
+    {
+        WinningSpriteName = CheckForWinningPatterns.INSTANCE.WinningIconName;
+        // Loop through each PrizeLevel in the PrizeLevelsList
+        foreach (var prizeLevel in PrizeLevelsList)
+        {
+            // Loop through each icon in the current PrizeLevel
+            foreach (var icon in prizeLevel.Icons)
+            {
+                // Check if the sprite of the icon matches the currentSprite
+                if (icon.GetComponent<Image>().sprite == WinningSpriteName)
+                {
+                    // If a match is found, print the PrizeName
+                    Debug.Log("PrizeName===================================================: " + prizeLevel.PrizeName);
+                    return; // Exit once a match is found
+                }
+            }
+        }
 
+        // If no match was found, you can optionally print this
+        //Debug.Log("No matching prize found for the current sprite.");
+    }
+
+   
+
+    
 }

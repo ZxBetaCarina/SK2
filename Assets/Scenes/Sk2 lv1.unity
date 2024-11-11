@@ -9781,41 +9781,41 @@ MonoBehaviour:
   slotRNGItems:
     ItemsForRNG:
     - Item: {fileID: 3006844835349394465, guid: f597f5f8ec9732c4291a76fbe27cc3f2, type: 3}
-      Probability: 500
+      Probability: 1
     - Item: {fileID: 15807688271875325, guid: f3db5654f5b6b164ab523a4b311f9af6, type: 3}
-      Probability: 500
+      Probability: 1
     - Item: {fileID: 1659626681397210405, guid: 5d6a29d3da93a6847b452fab6b0937be, type: 3}
-      Probability: 500
+      Probability: 1
     - Item: {fileID: 1392617881745507993, guid: 928a7c091fbe5d0428c28b2dd6de2098, type: 3}
-      Probability: 500
+      Probability: 1
     - Item: {fileID: 4424986425343659311, guid: 7c515bdfa70d9cc4baf27dd56f42c3dd, type: 3}
-      Probability: 40
+      Probability: 1
     - Item: {fileID: 4456721412420583807, guid: 5a2bbbcae54a4d74a970533fc4d3a2eb, type: 3}
-      Probability: 40
+      Probability: 1
     - Item: {fileID: 7066974137551870429, guid: 66539358aa570c2469010fae7331cfa1, type: 3}
-      Probability: 40
+      Probability: 1
     - Item: {fileID: 3334226191018852170, guid: 2e8eb427d1f5ea44995c54fdd7cff2f4, type: 3}
-      Probability: 40
+      Probability: 1
     - Item: {fileID: 4851021996735693295, guid: 1dcfa3e32f96d214d9c4e9dd32c06ca8, type: 3}
-      Probability: 60
+      Probability: 1
     - Item: {fileID: 7772456005752476066, guid: 34684f10dacadc44787bd910d853e63a, type: 3}
-      Probability: 60
+      Probability: 1
     - Item: {fileID: 6975359494690410145, guid: e2f441ae831289842ad4897226b7a4c4, type: 3}
-      Probability: 60
+      Probability: 1
     - Item: {fileID: 9161979890128498704, guid: ce54b204d1e1f8e48be55bcb55f2ed99, type: 3}
-      Probability: 60
+      Probability: 1
   jackpotRNGItems:
     ItemsForRNG:
     - Item: 2
-      Probability: 500
+      Probability: 2
     - Item: 3
-      Probability: 500
+      Probability: 1
     - Item: 1
-      Probability: 500
+      Probability: 3
     - Item: 4
-      Probability: 500
+      Probability: 0
     - Item: 0
-      Probability: 500
+      Probability: 5
   jackpotOccurPosition:
   - {fileID: 541799898}
   - {fileID: 999525428}

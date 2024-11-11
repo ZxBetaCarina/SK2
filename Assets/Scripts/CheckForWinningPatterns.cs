@@ -59,6 +59,8 @@ public class CheckForWinningPatterns : MonoBehaviour
 
     public bool isBonus = false;
 
+    public Sprite WinningIconName;
+
     private void Awake()
     {
         if (INSTANCE == null)
@@ -277,7 +279,8 @@ public class CheckForWinningPatterns : MonoBehaviour
             if (matchCount == 3)
             {
                 noOfPatterns++;
-                Debug.Log($"Pattern of 3 found with sprite {prevSprite}");
+                WinningIconName = prevSprite;
+                
 
                 // Handle special sprites for bonus logic
                 if (prevSprite == bonus1)

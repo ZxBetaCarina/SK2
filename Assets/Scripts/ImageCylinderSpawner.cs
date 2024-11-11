@@ -548,35 +548,93 @@ public class ImageCylinderSpawner : MonoBehaviour
                 }
             }
 
-            switch (currentSpinJackpot) //Allign sprites in a line to match
-            {
-                case JackpotTypes.Minor:
+            switch (currentSpinJackpot) // Align sprites in a line to match
+        {
+            case JackpotTypes.Minor:
+                // Randomly select one function to call for Minor
+                int minorSelection = Random.Range(0, 4); // Generates a random number between 0 and 3
+                switch (minorSelection)
+                {
+                    case 0:
+                        ModifySprites(slotRNGItems.ItemsForRNG[8].Item.GetComponent<SpriteRenderer>().sprite, slots);
+                        break;
+                    case 1:
+                        ModifySprites(slotRNGItems.ItemsForRNG[9].Item.GetComponent<SpriteRenderer>().sprite, slots);
+                        break;
+                    case 2:
+                        ModifySprites(slotRNGItems.ItemsForRNG[10].Item.GetComponent<SpriteRenderer>().sprite, slots);
+                        break;
+                    case 3:
+                        ModifySprites(slotRNGItems.ItemsForRNG[11].Item.GetComponent<SpriteRenderer>().sprite, slots);
+                        break;
+                }
+                break;
 
-                    ModifySprites(slotRNGItems.ItemsForRNG[3].Item.GetComponent<SpriteRenderer>().sprite, slots);
+            case JackpotTypes.Major:
+                // Randomly select one function to call for Major
+                int majorSelection = Random.Range(0, 4); // Generates a random number between 0 and 3
+                switch (majorSelection)
+                {
+                    case 0:
+                        ModifySprites(slotRNGItems.ItemsForRNG[4].Item.GetComponent<SpriteRenderer>().sprite, slots);
+                        break;
+                    case 1:
+                        ModifySprites(slotRNGItems.ItemsForRNG[5].Item.GetComponent<SpriteRenderer>().sprite, slots);
+                        break;
+                    case 2:
+                        ModifySprites(slotRNGItems.ItemsForRNG[6].Item.GetComponent<SpriteRenderer>().sprite, slots);
+                        break;
+                    case 3:
+                        ModifySprites(slotRNGItems.ItemsForRNG[7].Item.GetComponent<SpriteRenderer>().sprite, slots);
+                        break;
+                }
+                break;
 
-                    break;
+            case JackpotTypes.Grand:
+                // Randomly select one function to call for Grand
+                int grandSelection = Random.Range(0, 4); // Generates a random number between 0 and 3
+                switch (grandSelection)
+                {
+                    case 0:
+                        ModifySprites(slotRNGItems.ItemsForRNG[0].Item.GetComponent<SpriteRenderer>().sprite, slots);
+                        break;
+                    case 1:
+                        ModifySprites(slotRNGItems.ItemsForRNG[1].Item.GetComponent<SpriteRenderer>().sprite, slots);
+                        break;
+                    case 2:
+                        ModifySprites(slotRNGItems.ItemsForRNG[2].Item.GetComponent<SpriteRenderer>().sprite, slots);
+                        break;
+                    case 3:
+                        ModifySprites(slotRNGItems.ItemsForRNG[3].Item.GetComponent<SpriteRenderer>().sprite, slots);
+                        break;
+                }
+                break;
 
-                case JackpotTypes.Major:
-
-                    ModifySprites(slotRNGItems.ItemsForRNG[2].Item.GetComponent<SpriteRenderer>().sprite, slots);
-
-                    break;
-
-                case JackpotTypes.Grand:
-
-                    ModifySprites(slotRNGItems.ItemsForRNG[0].Item.GetComponent<SpriteRenderer>().sprite, slots);
-
-                    break;
-                case JackpotTypes.FreeSpin:
-
-                    ModifySprites(slotRNGItems.ItemsForRNG[1].Item.GetComponent<SpriteRenderer>().sprite, slots);
-
-                    break;
-            }
+            case JackpotTypes.FreeSpin:
+                // Randomly select one function to call for FreeSpin
+                int freeSpinSelection = Random.Range(0, 4); // Generates a random number between 0 and 3
+                switch (freeSpinSelection)
+                {
+                    case 0:
+                        ModifySprites(slotRNGItems.ItemsForRNG[1].Item.GetComponent<SpriteRenderer>().sprite, slots);
+                        break;
+                    case 1:
+                        ModifySprites(slotRNGItems.ItemsForRNG[1].Item.GetComponent<SpriteRenderer>().sprite, slots);
+                        break;
+                    case 2:
+                        ModifySprites(slotRNGItems.ItemsForRNG[1].Item.GetComponent<SpriteRenderer>().sprite, slots);
+                        break;
+                    case 3:
+                        ModifySprites(slotRNGItems.ItemsForRNG[1].Item.GetComponent<SpriteRenderer>().sprite, slots);
+                        break;
+                }
+                break;
+        }
         }
 
         StartRotatingCylinders();
         StartCoroutine(StopCylindersSequentially()); // Start stopping the cylinders sequentially
+        //CheckForWinningPatterns.INSTANCE.CheckPatterns();
     }
 
     private void FillOrigins()

@@ -9814,7 +9814,7 @@ MonoBehaviour:
     - Item: 1
       Probability: 3
     - Item: 4
-      Probability: 100
+      Probability: 0
     - Item: 0
       Probability: 5
   jackpotOccurPosition:

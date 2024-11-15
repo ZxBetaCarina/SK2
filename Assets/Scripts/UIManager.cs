@@ -43,8 +43,7 @@ public class UIManager : MonoBehaviour
     private string _waitPrefix = "Please Wait... ";
     private string _playAgainString = "Collect";
     private string _winningMsg = "Got It!!";
-    private string 
-        _losignMsg = "You Lose";
+    private string _losignMsg = "You Lose";
     [SerializeField] private float _winningPanelDelay = 5f;
     public bool RubicMode { get; private set; }
     private int _movesLeft;
@@ -252,7 +251,7 @@ public class UIManager : MonoBehaviour
         _playAgainButton.interactable = false;
         yield return new WaitForSeconds(_winningPanelDelay);
         //  int _waitTimer = 15;
-        if (ImageCylinderSpawner.INSTANCE.currentSpinJackpot != JackpotTypes.None && ImageCylinderSpawner.INSTANCE.currentSpinJackpot != JackpotTypes.FreeSpin)
+        if (ImageCylinderSpawner.INSTANCE.currentSpinJackpot != JackpotTypes.FreeSpin && ImageCylinderSpawner.INSTANCE.currentSpinJackpot != JackpotTypes.FreeSpin)
         {
             switch (ImageCylinderSpawner.INSTANCE.currentSpinJackpot)
             {
@@ -270,6 +269,7 @@ public class UIManager : MonoBehaviour
         //    _waitTimer--;
         //    yield return new WaitForSeconds(1f);
         //}
+        
         _waitingText.text = _playAgainString;
         _playAgainButton.interactable = true;
     }

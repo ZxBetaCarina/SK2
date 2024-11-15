@@ -121,6 +121,8 @@ public class GameController : MonoBehaviour
             Destroy(gameObject);
         }
         RestartLevel.onClick.AddListener(() => { SceneManager.LoadScene(1); });
+        
+        _current_bet_index = PlayerStats.Instance.CurrentBetIndex;
     }
 
     private void OnEnable()
@@ -155,6 +157,23 @@ public class GameController : MonoBehaviour
             print("Update Points 1");
             _currentPointsText.text = _display_points + "";
         }
+        
+        if (_current_bet_index == 0)
+        {
+            _decrease_bet_button.interactable = false;
+            _increase_bet_button.interactable = true;
+        }
+        else if (_current_bet_index == 5)
+        {
+            _decrease_bet_button.interactable = true;
+            _increase_bet_button.interactable = false;
+        }
+        else
+        {
+            _decrease_bet_button.interactable = true;
+            _increase_bet_button.interactable = true;
+        }
+        _current_bet_index = PlayerStats.Instance.CurrentBetIndex;
     }
 
     void Update()
@@ -173,21 +192,6 @@ public class GameController : MonoBehaviour
                 disableButton.interactable = true;
                 timerText.text = "";
             }
-        }
-        if (_current_bet_index == 0)
-        {
-            _decrease_bet_button.interactable = false;
-            _increase_bet_button.interactable = true;
-        }
-        else if (_current_bet_index == 5)
-        {
-            _decrease_bet_button.interactable = true;
-            _increase_bet_button.interactable = false;
-        }
-        else
-        {
-            _decrease_bet_button.interactable = true;
-            _increase_bet_button.interactable = true;
         }
         
     }
@@ -325,7 +329,7 @@ public class GameController : MonoBehaviour
         }
         else
         {
-            RestartLevel.gameObject.SetActive(true);
+            RestartLevel.gameObject.SetActive(false);
         }
 
     }

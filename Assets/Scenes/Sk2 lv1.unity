@@ -5022,7 +5022,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -76, y: -271}
+  m_AnchoredPosition: {x: -203.6, y: -271}
   m_SizeDelta: {x: 45, y: 35}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &453209961
@@ -13464,7 +13464,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be001d241b0e1514280f9f345c1ec923, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PrizeLevelsList: []
+  PrizeLevelsList:
+  - PrizeName: Minor
+    Icons:
+    - {fileID: 21300000, guid: 5f559e1057cdbb4439826d9819cabe5e, type: 3}
+    - {fileID: 21300000, guid: 3fbae0eaaa15a2d43a74de7252698ddc, type: 3}
+    - {fileID: 21300000, guid: 4a6cd5f2e0d1e6e4a8f279027328e751, type: 3}
+    - {fileID: 4851021996735693295, guid: 1dcfa3e32f96d214d9c4e9dd32c06ca8, type: 3}
+  - PrizeName: Major
+    Icons:
+    - {fileID: 21300000, guid: e5ca2c8149be4964a94e445517f154a8, type: 3}
+    - {fileID: 21300000, guid: 30c9085d744a54a47b3ebb4bcf43870f, type: 3}
+    - {fileID: 21300000, guid: 1c796c95532868f4e86ebd28bb66dd9d, type: 3}
+  - PrizeName: Grand
+    Icons:
+    - {fileID: 21300000, guid: cfd2788689b88364d9432a522eaf74f2, type: 3}
+    - {fileID: 21300000, guid: e7c81aaa64c118748bef16b11a8893e7, type: 3}
+    - {fileID: 21300000, guid: 4ba1f603dfb63fd4d997313660f422d4, type: 3}
+  - PrizeName: Free Spin
+    Icons:
+    - {fileID: 21300000, guid: 2952f468bc74fa34b9c4e3b57090e57b, type: 3}
+  - PrizeName: Bonus
+    Icons:
+    - {fileID: 21300000, guid: 4d32f6cb408ae5b4ea61da42cfa6325f, type: 3}
   balanceInsuffucientPanel: {fileID: 1647704365}
   balanceInsuffucientPanelActiveForSec: 0.75
   handsPlayed: {fileID: 1822529241}
@@ -13489,6 +13511,7 @@ MonoBehaviour:
   _winningPanelDelay: 5
   _readCube: {fileID: 0}
   _cubeState: {fileID: 0}
+  prizeNameText: {fileID: 592134950}
 --- !u!114 &952525973
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29249,7 +29272,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -204, y: -271}
+  m_AnchoredPosition: {x: -76, y: -271}
   m_SizeDelta: {x: 45, y: 35}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &2047289059

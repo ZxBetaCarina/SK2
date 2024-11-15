@@ -2,6 +2,7 @@ using System;
 using SK2;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -11,7 +12,7 @@ using UnityEngine.UI;
 public class PrizeLevels
 {
     public string PrizeName;
-    public List<GameObject> Icons;
+    public List<Sprite> Icons;
 }
 public class UIManager : MonoBehaviour
 {
@@ -42,7 +43,8 @@ public class UIManager : MonoBehaviour
     private string _waitPrefix = "Please Wait... ";
     private string _playAgainString = "Collect";
     private string _winningMsg = "Got It!!";
-    private string _losignMsg = "You Lose";
+    private string 
+        _losignMsg = "You Lose";
     [SerializeField] private float _winningPanelDelay = 5f;
     public bool RubicMode { get; private set; }
     private int _movesLeft;
@@ -51,6 +53,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private CubeState _cubeState;
 
     private Sprite WinningSpriteName;
+    private Sprite WinningSprite;
+    [SerializeField] private TextMeshProUGUI prizeNameText;
 
     private void Awake()
     {
@@ -252,17 +256,7 @@ public class UIManager : MonoBehaviour
         {
             switch (ImageCylinderSpawner.INSTANCE.currentSpinJackpot)
             {
-                case JackpotTypes.Minor:
-                    _winningText.text = "Minor Jackpot";
-                    break;
-
-                case JackpotTypes.Major:
-                    _winningText.text = "Major Jackpot";
-                    break;
-
-                case JackpotTypes.Grand:
-                    _winningText.text = "Grand Jackpot";
-                    break;
+                
             }
             print("JACKPOT HIT");
             print("Winning Panel");
@@ -301,24 +295,17 @@ public class UIManager : MonoBehaviour
     public void CheckCurrentSprite()
     {
         WinningSpriteName = CheckForWinningPatterns.INSTANCE.WinningIconName;
-        // Loop through each PrizeLevel in the PrizeLevelsList
+
         foreach (var prizeLevel in PrizeLevelsList)
         {
-            // Loop through each icon in the current PrizeLevel
-            foreach (var icon in prizeLevel.Icons)
+            if (prizeLevel.Icons.Contains(WinningSpriteName))
             {
-                // Check if the sprite of the icon matches the currentSprite
-                if (icon.GetComponent<Image>().sprite == WinningSpriteName)
-                {
-                    // If a match is found, print the PrizeName
-                    Debug.Log("PrizeName===================================================: " + prizeLevel.PrizeName);
-                    return; // Exit once a match is found
-                }
+                prizeNameText.text = prizeLevel.PrizeName;
+                return; // Exit once a match is found
             }
         }
 
-        // If no match was found, you can optionally print this
-        //Debug.Log("No matching prize found for the current sprite.");
+        Debug.Log("No matching prize found for the current sprite.");
     }
 
    

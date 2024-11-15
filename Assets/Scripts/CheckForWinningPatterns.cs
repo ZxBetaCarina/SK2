@@ -280,7 +280,7 @@ public class CheckForWinningPatterns : MonoBehaviour
             {
                 noOfPatterns++;
                 WinningIconName = prevSprite;
-                Debug.Log($"''''''''''''''''''''''''''''''''''''''' {WinningIconName}");
+                //Debug.Log($"''''''''''''''''''''''''''''''''''''''' {WinningIconName}");
                 
 
                 // Handle special sprites for bonus logic

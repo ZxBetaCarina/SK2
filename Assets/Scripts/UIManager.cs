@@ -18,6 +18,7 @@ public class UIManager : MonoBehaviour
 {
     
     public static UIManager Instance { get; private set; }
+    private GameController _gameController; 
     public List<PrizeLevels> PrizeLevelsList;
 
     [SerializeField, Tooltip("Panel shown if available balance insuffiecient")] private GameObject balanceInsuffucientPanel;
@@ -58,6 +59,7 @@ public class UIManager : MonoBehaviour
 
     private void Awake()
     {
+        _gameController = FindObjectOfType<GameController>();
         if (Instance == null)
         {
             Instance = this;
@@ -118,7 +120,17 @@ public class UIManager : MonoBehaviour
 
     public void StartGameSetUp()
     {
+        PlayerPrefs.GetFloat("_grand_prize_value", _gameController._grand_prize_value);
+        _gameController._grand_prize_text.text = _gameController._grand_prize_value.ToString();
+        Debug.Log(_gameController._grand_prize_value);
+        PlayerPrefs.GetFloat("_major_prize_value", _gameController._major_prize_value);
+        _gameController._major_prize_text.text = _gameController._major_prize_value.ToString();
+        Debug.Log(_gameController._major_prize_value);
+        PlayerPrefs.GetFloat("_minor_prize_value", _gameController._minor_prize_value);
+        _gameController._minor_prize_text.text = _gameController._minor_prize_value.ToString();
+        Debug.Log(_gameController._minor_prize_text);
         SceneManager.LoadScene(1);
+        
     }
 
     public void TriggerBalanceInsufficient()
@@ -210,8 +222,10 @@ public class UIManager : MonoBehaviour
     {
        
         freeSpinImage.SetActive(true);
+        isfreespin = true; 
         yield return new WaitForSeconds(2f);
         freeSpinImage.SetActive(false);
+        isfreespin = false; 
     }
 
     //private IEnumerator WaitForUserInput()
@@ -270,7 +284,7 @@ public class UIManager : MonoBehaviour
         _playAgainButton.interactable = false;
         yield return new WaitForSeconds(_winningPanelDelay);
         //  int _waitTimer = 15;
-        if ( freeSpinImage.activeInHierarchy == true)
+        if ( isfreespin == true)
         {
                 //  switch (ImageCylinderSpawner.INSTANCE.currentSpinJackpot)
                 //  {

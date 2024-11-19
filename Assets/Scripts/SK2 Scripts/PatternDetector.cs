@@ -169,6 +169,7 @@ namespace SK2
                     spinCounts = 15;
                     isLastSpin = true;
                 }
+                
 
 
                 noOfPatterns = 0;
@@ -195,6 +196,7 @@ namespace SK2
                 {
                     leftSpins.SetActive(false);
                     yield return new WaitForSeconds(2f);
+                    Debug.Log("CurrentBetIndex 6 "+PlayerPrefs.GetFloat("CurrentBetIndex")); 
                     SceneManager.LoadScene("Level 1");
                 }
                 else

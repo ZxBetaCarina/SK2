@@ -21,7 +21,7 @@ namespace RainbowJump.Scripts
         public Text highScoreText; // reference to the UI text for displaying the high score
 
         public float score = 0f;
-        private float highScore = 0f; // variable to hold the high score
+        public float highScore = 0f; // variable to hold the high score
 
         public bool gameOver = false;
 
@@ -111,6 +111,8 @@ namespace RainbowJump.Scripts
         }
         public void OnRestartClick()
         {
+            Debug.Log("CurrentBetIndex 1 "+PlayerPrefs.GetFloat("CurrentBetIndex"));
+             
             SceneManager.LoadScene(1);
         }
 

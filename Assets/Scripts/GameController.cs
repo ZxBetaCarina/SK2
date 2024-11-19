@@ -2,6 +2,7 @@ using SK2;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using RainbowJump.Scripts;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -9,6 +10,7 @@ using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
+    private Manager manager; 
     public GameObject targetObject;  // Reference to the GameObject to be disabled/enabled
     public Button disableButton;     // Reference to the UI button for disabling
     public TMP_Text timerText;           // Reference to the UI text for displaying the timer
@@ -20,13 +22,13 @@ public class GameController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _bettingInput;
     // [SerializeField] private TextMeshProUGUI CoolTimer;
 
-    [SerializeField] TMP_Text _grand_prize_text;
-    [SerializeField] TMP_Text _major_prize_text;
-    [SerializeField] TMP_Text _minor_prize_text;
+    [SerializeField] public TMP_Text _grand_prize_text;
+    [SerializeField] public  TMP_Text _major_prize_text;
+    [SerializeField] public TMP_Text _minor_prize_text;
 
-    [SerializeField] float _grand_prize_value;
-    [SerializeField] float _major_prize_value;
-    [SerializeField] float _minor_prize_value;
+    [SerializeField]public float _grand_prize_value;
+    [SerializeField]public float _major_prize_value;
+    [SerializeField]public float _minor_prize_value;
 
     [SerializeField] float _grand_prize_initial_value;
     [SerializeField] float _major_prize_initial_value;
@@ -120,8 +122,19 @@ public class GameController : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        RestartLevel.onClick.AddListener(() => { SceneManager.LoadScene(1); });
-        
+
+        RestartLevel.onClick.AddListener(() =>
+        {
+            // PlayerPrefs.SetFloat("Balance", _currentPoints);  
+            // PlayerPrefs.Save();
+           // PlayerPrefs.SetInt("CurrentBetIndex", _current_bet_index); 
+           // PlayerPrefs.SetFloat("CurrentBetAmountUSD", _bet_intervals_in_usd[_current_bet_index]);  
+           // PlayerPrefs.Save();  // Make sure the changes are saved to disk
+           // Debug.Log("CurrentBetIndex"+PlayerPrefs.GetFloat("CurrentBetIndex")); 
+            SceneManager.LoadScene(1); 
+            
+        });
+        //Debug.Log("CurrentBetIndex"+PlayerPrefs.HasKey("CurrentBetIndex"));
         _current_bet_index = PlayerStats.Instance.CurrentBetIndex;
     }
 
@@ -152,6 +165,7 @@ public class GameController : MonoBehaviour
         if (PlayerPrefs.HasKey("Balance"))
         {
             _currentPoints = PlayerPrefs.GetFloat("Balance");
+           
             _display_points = (int)Mathf.Round(_currentPoints * _point_multiplier);
             //print(_currentPoints);
             print("Update Points 1");
@@ -450,12 +464,17 @@ public class GameController : MonoBehaviour
             ++_current_bet_index;
             _grand_prize_value =_grand_prize_initial_value * (_current_bet_index == 0 ? 1 : (5 * _current_bet_index));
             _grand_prize_text.text = _grand_prize_value.ToString();
+            PlayerPrefs.SetFloat("_grand_prize_value", _grand_prize_value);
 
             _major_prize_value = _major_prize_initial_value * (_current_bet_index == 0 ? 1 : (5 * _current_bet_index));
             _major_prize_text.text = _major_prize_value.ToString();
+            PlayerPrefs.SetFloat("_major_prize_value", _major_prize_value);
+
 
             _minor_prize_value = _minor_prize_initial_value * (_current_bet_index == 0 ? 1 : (5 * _current_bet_index));
             _minor_prize_text.text = _minor_prize_value.ToString();
+            PlayerPrefs.SetFloat("_minor_prize_value", _minor_prize_value);
+            PlayerPrefs.Save();
 
 
             if (_current_bet_index + 1 >= _bet_intervals_in_usd.Count ||
@@ -473,6 +492,8 @@ public class GameController : MonoBehaviour
             }
 
             ImageCylinderSpawner.INSTANCE.RefreshCylinder();
+
+            
         }
     }
 
@@ -480,13 +501,18 @@ public class GameController : MonoBehaviour
     {
         --_current_bet_index;
         _grand_prize_value = _grand_prize_initial_value * (_current_bet_index == 0 ? 1 : (5 * _current_bet_index));
+        PlayerPrefs.SetFloat("_grand_prize_value", _grand_prize_value);
         _grand_prize_text.text = _grand_prize_value.ToString();
+        
 
         _major_prize_value = _major_prize_initial_value * (_current_bet_index == 0 ? 1 : (5 * _current_bet_index));
+        PlayerPrefs.SetFloat("_major_prize_value", _major_prize_value);
         _major_prize_text.text = _major_prize_value.ToString();
-
+        
         _minor_prize_value = _minor_prize_initial_value * (_current_bet_index == 0 ? 1 : (5 * _current_bet_index));
+        PlayerPrefs.SetFloat("_minor_prize_value", _minor_prize_value);
         _minor_prize_text.text = _minor_prize_value.ToString();
+        PlayerPrefs.Save(); 
 
         if (!ImageCylinderSpawner.INSTANCE.CylinderSpawning)
         {
@@ -504,6 +530,8 @@ public class GameController : MonoBehaviour
             }
             ImageCylinderSpawner.INSTANCE.RefreshCylinder();
         }
+
+        
     }
 
     /*public void DecreaseBet()
@@ -551,8 +579,45 @@ public class GameController : MonoBehaviour
     public void InitiateBet()
     {
         AvailableCredit();
+        if (PlayerPrefs.HasKey("_grand_prize_value"))
+        {
+            _grand_prize_value = PlayerPrefs.GetFloat("_grand_prize_value");
+            _grand_prize_text.text = _grand_prize_value.ToString();
+        }
+        else
+        {
+            // Fallback to initial values if no saved data exists
+            _grand_prize_value = _grand_prize_initial_value;
+        }
+
+        if (PlayerPrefs.HasKey("_major_prize_value"))
+        {
+            _major_prize_value = PlayerPrefs.GetFloat("_major_prize_value");
+            _major_prize_text.text = _major_prize_value.ToString();
+        }
+        else
+        {
+            // Fallback to initial values if no saved data exists
+            _major_prize_value = _major_prize_initial_value;
+        }
+
+        if (PlayerPrefs.HasKey("_minor_prize_value"))
+        {
+            _minor_prize_value = PlayerPrefs.GetFloat("_minor_prize_value");
+            _minor_prize_text.text = _minor_prize_value.ToString();
+        }
+        else
+        {
+            // Fallback to initial values if no saved data exists
+            _minor_prize_value = _minor_prize_initial_value;
+            _grand_prize_value = _major_prize_initial_value;
+            _major_prize_value = _major_prize_initial_value;    
+        }
+
         //print(PlayerStats.Instance.CurrentBetIndex);
         _current_bet_index = PlayerStats.Instance.CurrentBetIndex;
+       // PlayerPrefs.SetInt("CurrentBetIndex", _current_bet_index);
+       // PlayerPrefs.SetFloat("CurrentBetAmountUSD", _bet_intervals_in_usd[_current_bet_index]);
         bool test = Is_Balance_Sufficient;
         //_increase_bet_button.interactable = true;
         //_decrease_bet_button.interactable = true;
@@ -572,5 +637,15 @@ public class GameController : MonoBehaviour
         timer = 0;
         //timerText.text = " ";
 
+    }
+    
+    void OnApplicationQuit()
+    {
+        
+        PlayerPrefs.DeleteKey("_grand_prize_value");
+        PlayerPrefs.DeleteKey("_major_prize_value");
+        PlayerPrefs.DeleteKey("_minor_prize_value");
+        
+        PlayerPrefs.Save();
     }
 }

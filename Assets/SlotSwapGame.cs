@@ -20,6 +20,8 @@ namespace SK2Gameplays
             else if (Input.GetMouseButtonDown(0))
             {
                 TouchShift();
+                
+                
             }
         }
 
@@ -27,6 +29,7 @@ namespace SK2Gameplays
         {
             print("Turn on shift button");
             ImageCylinderSpawner.INSTANCE.Shift();
+            
         }
 
         public void CylinderSelected(int cylinderSelected)

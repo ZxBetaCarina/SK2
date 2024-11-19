@@ -26,7 +26,7 @@ public class ImageCylinderSpawner : MonoBehaviour
     [Header("Cylinder Data")] [SerializeField]
     private Vector3 _position;
 
-    [SerializeField] private GameObject _shiftingPanel;
+    [SerializeField] public  GameObject _shiftingPanel;
 
     [Header("Slot Image Cylinder")] [SerializeField]
     private LayerMask _imageLayer;
@@ -43,7 +43,7 @@ public class ImageCylinderSpawner : MonoBehaviour
     public Transform[] cylinderParents;
     public Vector3[] cylinderSpawnPoints;
     public bool[] cylinderRotationStates;
-
+    public bool freespin; 
     public Button _button_left;
     public Button _button_right;
 
@@ -177,7 +177,7 @@ public class ImageCylinderSpawner : MonoBehaviour
     {
         _spinButton.interactable = false;
         print("Turn OFF SPIN");
-
+         Debug.Log("spining "); 
         GameController.Instance._increase_bet_button.interactable = false;
         GameController.Instance._decrease_bet_button.interactable = false;
         if (!_betConfirmed) return;
@@ -228,6 +228,7 @@ public class ImageCylinderSpawner : MonoBehaviour
                             {
                                 AlignSymbolWithCenter(symbolCollider.transform, collider.transform);
                                 StopNextCylinder(); // Stop the rotation for the current cylinder
+                                
                             }
                         }
                     }
@@ -432,6 +433,7 @@ public class ImageCylinderSpawner : MonoBehaviour
     {
         _isRotating = true;
         _currentCylinder = 0;
+        Debug.Log("stp spping ");
     }
 
 
@@ -563,7 +565,7 @@ public class ImageCylinderSpawner : MonoBehaviour
                         break;
                     case 2:
                         ModifySprites(slotRNGItems.ItemsForRNG[10].Item.GetComponent<SpriteRenderer>().sprite, slots);
-                        break;
+                        break;  
                     case 3:
                         ModifySprites(slotRNGItems.ItemsForRNG[11].Item.GetComponent<SpriteRenderer>().sprite, slots);
                         break;
@@ -710,7 +712,7 @@ public class ImageCylinderSpawner : MonoBehaviour
         _spinButton.gameObject.SetActive(false);
 
         //TODO:Winning Checked Here
-        CheckWinningCondition();
+       CheckWinningCondition();
         _betConfirmed = false;
     }
 
@@ -728,6 +730,7 @@ public class ImageCylinderSpawner : MonoBehaviour
 
     public void OnPatternNotFound()
     {
+       
         StartCoroutine(OnPatternNotFound(false));
     }
 
@@ -746,6 +749,7 @@ public class ImageCylinderSpawner : MonoBehaviour
         if (CanShiftCylinder && !DoorAnim.INSTANCE.IsAnimRunning)
         {
             _shiftingPanel.SetActive(true);
+           // CheckForWinningPatterns.INSTANCE.isButtonClicked = false; 
         }
     }
 
@@ -754,8 +758,14 @@ public class ImageCylinderSpawner : MonoBehaviour
         if (CanShiftCylinder && !DoorAnim.INSTANCE.IsAnimRunning)
         {
             _shiftingPanel.SetActive(false);
+           // CheckForWinningPatterns.INSTANCE.isButtonClicked = true;
             cylinderParents[cylinderCount].localRotation = Quaternion.AngleAxis(360 / numberOfImages, Vector3.down) *
                                                            cylinderParents[cylinderCount].localRotation;
+           
+            CanShiftCylinder = false;
+            IsLastChanceToWin = true;
+            CheckWinningCondition();
+          
             //for (float i = 0; i <= 1; i += 0.01f)
             //{
             //    if (!Application.isPlaying)
@@ -764,9 +774,7 @@ public class ImageCylinderSpawner : MonoBehaviour
 
             //    await Task.Delay((int)_swapSpeed * 100);
             //}
-            CanShiftCylinder = false;
-            IsLastChanceToWin = true;
-            CheckWinningCondition();
+          
         }
     }
 
@@ -778,7 +786,7 @@ public class ImageCylinderSpawner : MonoBehaviour
     }
 
     public void Shift_Right()
-    {
+    { 
         _button_left.interactable = false;
         _button_right.interactable = false;
         StartCoroutine(Cor_Shift_Right());
@@ -789,6 +797,7 @@ public class ImageCylinderSpawner : MonoBehaviour
         if (CanShiftCylinder && !DoorAnim.INSTANCE.IsAnimRunning)
         {
             _shiftingPanel.SetActive(false);
+            //checkForWinningPatterns. isButtonClicked = true;  
             Vector3[] startPositions = new Vector3[4];
             Vector3[] targetPositions = new Vector3[4];
 
@@ -827,15 +836,27 @@ public class ImageCylinderSpawner : MonoBehaviour
 
             CanShiftCylinder = false;
             IsLastChanceToWin = true;
+         
             CheckWinningCondition();
         }
     }
-
+    public void CheckWinningCondition()
+    {
+       // if(_shiftingPanel.activeInHierarchy == false  &&  CheckForWinningPatterns.INSTANCE.isButtonClicked== true)
+      //  {
+             if (CheckForWinningPatterns.INSTANCE != null) { 
+                 CheckForWinningPatterns.INSTANCE.CheckPatterns(); 
+                 checkedForPatterns = true;
+             }
+       // }
+            
+    }
     IEnumerator Cor_Shift_Right()
     {
         if (CanShiftCylinder && !DoorAnim.INSTANCE.IsAnimRunning)
         {
             _shiftingPanel.SetActive(false);
+            //CheckForWinningPatterns.INSTANCE.isButtonClicked = true;
             Vector3[] startPositions = new Vector3[4];
             Vector3[] targetPositions = new Vector3[4];
 
@@ -874,7 +895,9 @@ public class ImageCylinderSpawner : MonoBehaviour
 
             CanShiftCylinder = false;
             IsLastChanceToWin = true;
-            CheckWinningCondition();
+          
+             CheckWinningCondition();
+            
         }
     }
 
@@ -958,6 +981,7 @@ public class ImageCylinderSpawner : MonoBehaviour
         if (CanShiftCylinder && !DoorAnim.INSTANCE.IsAnimRunning)
         {
             _shiftingPanel.SetActive(false);
+            //CheckForWinningPatterns.INSTANCE.isButtonClicked = true; 
             cylinderParents[cylinderCount].localRotation = Quaternion.AngleAxis(360 / numberOfImages, Vector3.up) *
                                                            cylinderParents[cylinderCount].localRotation;
             //for (float i = 0; i <= 1; i += 0.01f)
@@ -970,7 +994,10 @@ public class ImageCylinderSpawner : MonoBehaviour
             //}
             CanShiftCylinder = false;
             IsLastChanceToWin = true;
-            CheckWinningCondition();
+           
+                CheckWinningCondition();
+           
+           
         }
     }
 
@@ -1154,18 +1181,11 @@ public class ImageCylinderSpawner : MonoBehaviour
         CylinderSpawning = false;
     }
 
-    public void CheckWinningCondition()
-    {
-        if (CheckForWinningPatterns.INSTANCE != null)
-        {
-            CheckForWinningPatterns.INSTANCE.CheckPatterns();
-            checkedForPatterns = true;
-        }
-    }
 
     public void StartBonusSpin()
     {
-        
+        UIManager.Instance._winningPanel.SetActive(false);   
+        Debug.Log("deactivate winning panle ");
         StartCoroutine(FifteenBonusSpins());
     }
 

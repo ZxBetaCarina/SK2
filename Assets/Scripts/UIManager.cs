@@ -25,7 +25,7 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI handsPlayed;
 
-    [SerializeField] private GameObject _winningPanel;
+    [SerializeField] public GameObject _winningPanel;
     [SerializeField] private TextMeshProUGUI _winningText;
     [SerializeField] private TMP_Text _message;
     [SerializeField] private TextMeshProUGUI _waitingText;
@@ -47,6 +47,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private float _winningPanelDelay = 5f;
     public bool RubicMode { get; private set; }
     private int _movesLeft;
+    public bool isfreespin = false; 
 
     [SerializeField] private ReadCube _readCube;
     [SerializeField] private CubeState _cubeState;
@@ -199,12 +200,15 @@ public class UIManager : MonoBehaviour
 
     public void ShowFreeSpin()
     {
+        isfreespin = true; 
+        Debug.Log("Free Spin active, hiding winning panel.");
         StartCoroutine(FreeSpinShow());
     }
 
 
     IEnumerator FreeSpinShow()
     {
+       
         freeSpinImage.SetActive(true);
         yield return new WaitForSeconds(2f);
         freeSpinImage.SetActive(false);
@@ -236,11 +240,20 @@ public class UIManager : MonoBehaviour
         _spinButton.interactable = false;
         _refreshButton.interactable = false;
         RubicMode = false;
-        if (!CheckForWinningPatterns.INSTANCE.isBonus)
+        if (isfreespin == true)
         {
-            StartCoroutine(nameof(SetWinningPanelActive), _winningMsg);
-            CheckCurrentSprite();
+            Debug.Log("Free Spin active, hiding winning panel.");
+            _winningPanel.SetActive(false);
         }
+        else
+        {
+            if (!CheckForWinningPatterns.INSTANCE.isBonus)
+            {
+                StartCoroutine(nameof(SetWinningPanelActive), _winningMsg);
+                CheckCurrentSprite();
+            }
+        }
+        
         //StopCoroutine(WaitForUserInput());
         
 
@@ -248,30 +261,44 @@ public class UIManager : MonoBehaviour
 
     private IEnumerator SetWinningPanelActive(string text)
     {
+        if (isfreespin)
+        {
+            Debug.Log("Free Spin active, hiding winning panel.");
+            _winningPanel.SetActive(false);  // Hide winning panel during free spin
+            yield break;  // Exit the coroutine early
+        }
         _playAgainButton.interactable = false;
         yield return new WaitForSeconds(_winningPanelDelay);
         //  int _waitTimer = 15;
-        if (ImageCylinderSpawner.INSTANCE.currentSpinJackpot != JackpotTypes.FreeSpin && ImageCylinderSpawner.INSTANCE.currentSpinJackpot != JackpotTypes.FreeSpin)
+        if ( freeSpinImage.activeInHierarchy == true)
         {
-            switch (ImageCylinderSpawner.INSTANCE.currentSpinJackpot)
-            {
-                
-            }
+                //  switch (ImageCylinderSpawner.INSTANCE.currentSpinJackpot)
+                //  {
+                //ImageCylinderSpawner.INSTANCE.currentSpinJackpot == JackpotTypes.FreeSpin &&
+                //  }
+
+                print("JACKPOT HIT");
+                print("Winning Panel");
+                _winningPanel.SetActive(false);
+        }
+        else
+        {
             print("JACKPOT HIT");
             print("Winning Panel");
             _winningPanel.SetActive(true);
         }
-        // _winningText.text = text;
-        //  _message.text = "";
-        //while (_waitTimer > 0)
-        //{
-        //    _waitingText.text = _waitPrefix + _waitTimer + "s";
-        //    _waitTimer--;
-        //    yield return new WaitForSeconds(1f);
-        //}
+            // _winningText.text = text;
+            //  _message.text = "";
+            //while (_waitTimer > 0)
+            //{
+            //    _waitingText.text = _waitPrefix + _waitTimer + "s";
+            //    _waitTimer--;
+            //    yield return new WaitForSeconds(1f);
+            //}
+
+            _waitingText.text = _playAgainString;
+            _playAgainButton.interactable = true;
         
-        _waitingText.text = _playAgainString;
-        _playAgainButton.interactable = true;
     }
 
     public void OnClickFollowButton()

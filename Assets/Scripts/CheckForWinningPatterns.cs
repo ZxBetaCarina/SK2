@@ -5,13 +5,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-[System.Serializable]
-public class PatternInfo
-{
-    public List<Vector3> patternPositions; // List of positions forming the pattern
-    public float reward; // Reward associated with the pattern
-    public Sprite patternSprite; // The sprite or symbol that made the pattern (optional)
-}
+
+
 [Serializable]
 public class RaycastOriginTransforms
 {
@@ -275,9 +270,7 @@ public class CheckForWinningPatterns : MonoBehaviour
             int matchCount = 0;
             Sprite prevSprite = null;
             List<Vector3> detected = new List<Vector3>();
-            List<PatternInfo> allPatterns = new List<PatternInfo>(); // Track all detected patterns
-            float highestReward = 0f; // Track the highest reward
-            PatternInfo bestPattern = null; 
+           
 
             for (int i = 0; i < transformList.Count; i++)
             {

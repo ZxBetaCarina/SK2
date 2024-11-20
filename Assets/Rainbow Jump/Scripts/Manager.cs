@@ -41,8 +41,8 @@ namespace RainbowJump.Scripts
         public AudioClip deathSound;
         public AudioClip buttonSound;
         private AudioSource audioSource;
-        
         private float previousYPosition = 0f;
+        private GameController gameController;  
 
         // Start is called before the first frame update
         void Start()
@@ -52,9 +52,10 @@ namespace RainbowJump.Scripts
             playerMovement.rb.simulated = false;
 
             audioSource = GetComponent<AudioSource>();
+            gameController = GetComponent<GameController>();
 
             RestartGame();
-
+            
             // Load the high score from PlayerPrefs and display it in the UI
             //highScore = PlayerPrefs.GetFloat("HighScore", 0f);
             highScoreText.text = "Score: " + highScore.ToString("0");
@@ -81,6 +82,10 @@ namespace RainbowJump.Scripts
                 {
                     highScore = score;
                     highScoreText.text = "Score: " + highScore.ToString("0");
+                    highScore = (int)Mathf.Round(highScore);
+                    PlayerPrefs.SetFloat("highScore", highScore);
+                    Debug.Log("High Score: " + highScore);      
+                    PlayerPrefs.Save();
                 }
             }
 
@@ -111,9 +116,11 @@ namespace RainbowJump.Scripts
         }
         public void OnRestartClick()
         {
-            Debug.Log("CurrentBetIndex 1 "+PlayerPrefs.GetFloat("CurrentBetIndex"));
-             
+            //Debug.Log("CurrentBetIndex 1 "+PlayerPrefs.GetFloat("CurrentBetIndex"));
             SceneManager.LoadScene(1);
+            // Get the high score from PlayerPrefs
+          
+            
         }
 
         public void RestartGame()
@@ -130,6 +137,7 @@ namespace RainbowJump.Scripts
             spawner.DestroyAllObstacles();
             spawner.InitializeObstacles();
             score = 0f;
+            highScore = PlayerPrefs.GetFloat("HighScore", 0f);
 
             playerTrail.Clear();
         }

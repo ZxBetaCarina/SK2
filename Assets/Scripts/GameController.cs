@@ -275,10 +275,16 @@ public class GameController : MonoBehaviour
         _winningAudio.Play();
         _coinFx.SetActive(true);
         ImageRNGSpawner.Instance.won = true;
+        int fxcount = 0;
         foreach (var pos in _patterns)
         {
+            Debug.Log("Instantiating FX at position: " + pos);
             GameObject fx = Instantiate(_pattern_FX, pos, Quaternion.identity);
             Destroy(fx, 3f);
+            
+
+            // Destroy the FX after 3 seconds
+            
         }
 
         if (UIManager.Instance.RubicMode)

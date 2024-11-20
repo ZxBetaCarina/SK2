@@ -9722,10 +9722,10 @@ MonoBehaviour:
       Probability: 1
   jackpotRNGItems:
     ItemsForRNG:
-    - Item: 2
-      Probability: 2
     - Item: 3
       Probability: 1
+    - Item: 2
+      Probability: 2
     - Item: 1
       Probability: 3
     - Item: 4

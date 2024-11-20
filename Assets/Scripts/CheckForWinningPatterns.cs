@@ -326,10 +326,14 @@ public class CheckForWinningPatterns : MonoBehaviour
                         else
                         {
                             foreach (var pattern in detected)
-                            {
-                                GameController.Instance._patterns.Add(pattern);
-                                Debug.Log("Pattern Found");
-                            }
+                           {
+                                // Check if there is already a pattern selected, if not, add the first one found
+                                
+                                    GameController.Instance._patterns.Add(pattern);
+                                    Debug.Log("Pattern detected: " + pattern);
+                                    Debug.Log("Pattern Found");
+                               
+                          }
                         }
 
                         // Reset to allow detection of additional patterns

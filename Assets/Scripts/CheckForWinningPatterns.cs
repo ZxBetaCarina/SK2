@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -266,8 +267,7 @@ public class CheckForWinningPatterns : MonoBehaviour
     }
     private void CheckPatternsInList(List<Transform> transformList)
     {
-        
-            int matchCount = 0;
+        int matchCount = 0;
             Sprite prevSprite = null;
             List<Vector3> detected = new List<Vector3>();
            

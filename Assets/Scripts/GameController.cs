@@ -20,6 +20,8 @@ public class GameController : MonoBehaviour
     private float disableDuration = 60f;
     private float timer;
     [SerializeField] private TextMeshProUGUI _bettingInput;
+
+    private ImageCylinderSpawner ics;
     // [SerializeField] private TextMeshProUGUI CoolTimer;
 
     [SerializeField] public TMP_Text _grand_prize_text;
@@ -278,12 +280,14 @@ public class GameController : MonoBehaviour
         int fxcount = 0;
         foreach (var pos in _patterns)
         {
+            if (fxcount >= 3)
+            {
+                break;  
+            }
             Debug.Log("Instantiating FX at position: " + pos);
             GameObject fx = Instantiate(_pattern_FX, pos, Quaternion.identity);
             Destroy(fx, 3f);
-            
-
-            // Destroy the FX after 3 seconds
+            fxcount++;  
             
         }
 
@@ -414,6 +418,7 @@ public class GameController : MonoBehaviour
     public void StartJackPotMode()
     {
         _jackpotModepanel.SetActive(true);
+            
     }
     public void JackPotWinning()
     {

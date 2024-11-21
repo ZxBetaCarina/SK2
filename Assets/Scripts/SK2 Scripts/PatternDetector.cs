@@ -28,6 +28,7 @@ namespace SK2
         [SerializeField] private TMP_Text reviewText;
 
         public static Action CoolDownRubicButton;
+        private ImageCylinderSpawner ics;
 
         public static Action PatternFound;
         public static Action PatternNotFound;
@@ -55,6 +56,10 @@ namespace SK2
             }
         }
 
+        public void Start()
+        {
+            ics = GetComponent<ImageCylinderSpawner>();    
+        }
 
         public void FinaliseBet()
         {
@@ -222,7 +227,10 @@ namespace SK2
             if (!_checking)
             {
                 _isJackPotMode = GameController.Instance.JackPotMode;
-                StartCoroutine(CheckForPatterns());
+                
+                    StartCoroutine(CheckForPatterns());
+                
+               
             }
         }
 
@@ -252,6 +260,7 @@ namespace SK2
                         matchCount++;
                         previousImageName = detectedObject.transform.gameObject.name;
                         detected.Add(detectedObject.transform.position);
+                        Debug.Log("detected object 1  "+detected);
                     }
                 }
 
@@ -267,6 +276,8 @@ namespace SK2
                         {
                             matchCount++;
                             detected.Add(detectedObject.transform.position);
+                           
+                            
                         }
                         else
                         {
@@ -275,7 +286,7 @@ namespace SK2
                             matchCount = 1;
                             previousImageName = detectedObject.transform.gameObject.name;
                             detected = new List<Vector3>();
-                            detected.Add(detectedObject.transform.position);
+                            
                         }
                         if (matchCount >= 3)
                         {
@@ -348,9 +359,8 @@ namespace SK2
             {
 
             }
-
-
             StartCoroutine(nameof(CheckForPatterns));
+           
 
 
         }

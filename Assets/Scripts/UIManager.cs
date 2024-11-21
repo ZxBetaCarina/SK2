@@ -56,6 +56,7 @@ public class UIManager : MonoBehaviour
     private Sprite WinningSpriteName;
     private Sprite WinningSprite;
     [SerializeField] private TextMeshProUGUI prizeNameText;
+    public ImageCylinderSpawner ics;
 
     private void Awake()
     {
@@ -90,6 +91,7 @@ public class UIManager : MonoBehaviour
 
     IEnumerator Start()
     {
+        
         _readCube = FindObjectOfType<ReadCube>();
         _cubeState = FindObjectOfType<CubeState>();
 
@@ -263,8 +265,11 @@ public class UIManager : MonoBehaviour
         {
             if (!CheckForWinningPatterns.INSTANCE.isBonus)
             {
-                StartCoroutine(nameof(SetWinningPanelActive), _winningMsg);
-                CheckCurrentSprite();
+              
+                    StartCoroutine(nameof(SetWinningPanelActive), _winningMsg);
+                    CheckCurrentSprite();
+                
+                
             }
         }
         

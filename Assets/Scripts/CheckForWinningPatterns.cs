@@ -27,6 +27,7 @@ public enum JackpotTypes
 public class CheckForWinningPatterns : MonoBehaviour
 {
     public List<Transform> ForthRow;
+    public GameObject shiftpanelchecker; 
 
     public List<RaycastOriginTransforms> raycastPatterns;
     public static CheckForWinningPatterns INSTANCE;
@@ -36,6 +37,7 @@ public class CheckForWinningPatterns : MonoBehaviour
     [SerializeField] private GameObject reviewImgParent;
     [SerializeField] private Button reviewBtn;
     [SerializeField] private TMP_Text reviewText;
+    
 
     [Header("Bonus and Jackpot Icon")]
     [SerializeField] private Sprite bonus1;
@@ -47,7 +49,7 @@ public class CheckForWinningPatterns : MonoBehaviour
     [SerializeField] private Sprite jackpotGrand;*/
 
     public static Action CoolDownRubicButton;
-    private ImageCylinderSpawner ics;
+  //  public ImageCylinderSpawner ics;
 
     public static Action PatternFound;
     public static Action PatternNotFound;
@@ -80,7 +82,7 @@ public class CheckForWinningPatterns : MonoBehaviour
 
     public void Start()
     {
-        ics = GetComponent<ImageCylinderSpawner>();
+       // ics = GetComponent<ImageCylinderSpawner>();
     }
 
     public void FinaliseBet()
@@ -158,7 +160,7 @@ public class CheckForWinningPatterns : MonoBehaviour
     {
        
             {
-                if (!_checking)
+                if (!_checking )
                     StartCoroutine(nameof(CheckForPatterns));
 
             }
@@ -168,84 +170,90 @@ public class CheckForWinningPatterns : MonoBehaviour
 
     public IEnumerator CheckForPatterns()
     {
+        // have to add the game object here 
+        
         if (_checking) yield break;
 
           
         _checking = true;
         //yield return new WaitForSeconds(.1f);
+       
+            foreach (var raycastOrigins in raycastPatterns)
+            {
+                CheckPatternsInList(raycastOrigins.raycastOrigins);
+                //yield return new WaitForSeconds(0.01f);
+            }
 
-        foreach (var raycastOrigins in raycastPatterns)
-        {
-            CheckPatternsInList(raycastOrigins.raycastOrigins);
-            //yield return new WaitForSeconds(0.01f);
-        }
-        Debug.Log("Total Patterns = " + noOfPatterns);
+            Debug.Log("Total Patterns = " + noOfPatterns);
 
-        if (isBonus)
-        {
+            if (isBonus)
+            {
 
-            if (noOfPatterns >= 1)
+                if (noOfPatterns >= 1)
+                {
+                    PatternFound?.Invoke();
+                    ImageCylinderSpawner.INSTANCE.won = false;
+                }
+
+                yield return new WaitForSeconds(2f);
+                print("Start Fifteen spins");
+                ImageCylinderSpawner.INSTANCE.StartBonusSpin();
+
+                spinCounts--;
+
+                leftSpinsText.text = spinCounts + "/" + 15;
+
+                _checking = false;
+
+
+
+                if (spinCounts < 1)
+                {
+                    isBonus = false;
+                    isLastSpin = true;
+                }
+
+
+                noOfPatterns = 0;
+                yield break;
+            }
+
+            /*if (isBonus)
+            {
+               isBonus = false;
+            }*/
+
+            if (noOfPatterns >= 1 && !_isJackPotMode)
             {
                 PatternFound?.Invoke();
-                ImageCylinderSpawner.INSTANCE.won = false;
             }
-            yield return new WaitForSeconds(2f);
-            print("Start Fifteen spins");
-            ImageCylinderSpawner.INSTANCE.StartBonusSpin();
-
-            spinCounts--;
-
-            leftSpinsText.text = spinCounts + "/" + 15;
-
-            _checking = false;
-
-
-
-            if (spinCounts < 1)
+            else if (noOfPatterns >= 1 && _isJackPotMode)
             {
-                isBonus = false;
-                isLastSpin = true;
-            }
-
-
-            noOfPatterns = 0;
-            yield break;
-        }
-
-        /*if (isBonus)
-        {
-            isBonus = false;
-        }*/
-
-        if (noOfPatterns >= 1 && !_isJackPotMode)
-        {
-            PatternFound?.Invoke();
-        }
-        else if (noOfPatterns >= 1 && _isJackPotMode)
-        {
-            PatternFound?.Invoke();
-            GameController.Instance.JackPotWinning();
-        }
-        else
-        {
-            if (isLastSpin)
-            {
-                leftSpins.SetActive(false);
-                yield return new WaitForSeconds(2f);
-                Debug.Log("CurrentBetIndex 4 "+PlayerPrefs.GetFloat("CurrentBetIndex")); 
-                SceneManager.LoadScene(1);
+                PatternFound?.Invoke();
+                GameController.Instance.JackPotWinning();
             }
             else
             {
-                PatternNotFound?.Invoke();
+                if (isLastSpin)
+                {
+                    leftSpins.SetActive(false);
+                    yield return new WaitForSeconds(2f);
+                    Debug.Log("CurrentBetIndex 4 " + PlayerPrefs.GetFloat("CurrentBetIndex"));
+                    SceneManager.LoadScene(1);
+                }
+                else
+                {
+                    PatternNotFound?.Invoke();
 
+                }
             }
-        }
-        _isJackPotMode = false;
 
-        noOfPatterns = 0;
-        _checking = false;
-        CoolDownRubicButton?.Invoke();
+            _isJackPotMode = false;
+
+            noOfPatterns = 0;
+            _checking = false;
+            CoolDownRubicButton?.Invoke();
+        
     }
 
     public void DisableLastRow()
@@ -255,10 +263,11 @@ public class CheckForWinningPatterns : MonoBehaviour
 
     public void CheckPatterns()
     {
-         
-            if (!_checking)
+        // Debug.Log("Checking Patterns outside ");    
+            if (!_checking && ImageCylinderSpawner.INSTANCE.CanShiftCylinder == false) 
             {
                 _isJackPotMode = GameController.Instance.JackPotMode;
+                Debug.Log("Checking Patterns inside ");   
                 StartCoroutine(CheckForPatterns());
             }
             
@@ -352,8 +361,49 @@ public class CheckForWinningPatterns : MonoBehaviour
             }
         
     }
+    
+    private IEnumerator Bonus2start()
+    {
+        yield return new WaitForSeconds(2f);
+        SceneManager.LoadScene(2);
+    }
 
-    /*private void CheckPatternsInList(List<Transform> transformList)
+    private IEnumerator DelayFreeSpin()
+    {
+        yield return new WaitForSeconds(2f);
+        UIManager.Instance.ShowFreeSpin();
+        UIManager.Instance._winningPanel.SetActive(false);
+        StartCoroutine(ShowDelaysSpinsLeft());
+        print("Is Bonus True");
+        isBonus = true;
+        isfreespin = true;  
+        StartCoroutine(CheckForPatterns());
+    }
+
+    IEnumerator ShowDelaysSpinsLeft()
+    {
+        yield return new WaitForSeconds(2f);
+        leftSpins.SetActive(true);
+        leftSpinsText.text = 15 + "/" + 15;
+    }
+
+    private IEnumerator BonusThird()
+    {
+        //Show Bonus UI
+        yield return new WaitForSeconds(2f);
+        SceneManager.LoadScene("Bonus 3");
+    }
+
+    public void OnRevealEnabled()
+    {
+        //while (_checking)
+       // {
+
+       // }
+
+        StartCoroutine(nameof(CheckForPatterns));
+    }
+        /*private void CheckPatternsInList(List<Transform> transformList)
     {
         int matchCount = 0;
         Sprite prevSprite = null;
@@ -433,47 +483,4 @@ public class CheckForWinningPatterns : MonoBehaviour
             }
         }
     }*/
-
-    
-    private IEnumerator Bonus2start()
-    {
-        yield return new WaitForSeconds(2f);
-        SceneManager.LoadScene(2);
-    }
-
-    private IEnumerator DelayFreeSpin()
-    {
-        yield return new WaitForSeconds(2f);
-        UIManager.Instance.ShowFreeSpin();
-        UIManager.Instance._winningPanel.SetActive(false);
-        StartCoroutine(ShowDelaysSpinsLeft());
-        print("Is Bonus True");
-        isBonus = true;
-        isfreespin = true;  
-        StartCoroutine(CheckForPatterns());
-    }
-
-    IEnumerator ShowDelaysSpinsLeft()
-    {
-        yield return new WaitForSeconds(2f);
-        leftSpins.SetActive(true);
-        leftSpinsText.text = 15 + "/" + 15;
-    }
-
-    private IEnumerator BonusThird()
-    {
-        //Show Bonus UI
-        yield return new WaitForSeconds(2f);
-        SceneManager.LoadScene("Bonus 3");
-    }
-
-    public void OnRevealEnabled()
-    {
-        while (_checking)
-        {
-
-        }
-
-        StartCoroutine(nameof(CheckForPatterns));
-    }
 }

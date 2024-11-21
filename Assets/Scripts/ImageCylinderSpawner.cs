@@ -32,6 +32,7 @@ public class ImageCylinderSpawner : MonoBehaviour
     private LayerMask _imageLayer;
 
     public GameObject[] imagePrefabs; // Array to hold different sets of image prefabs
+    public GameObject shiftpanelchecker; 
     public int numberOfImages = 21;
     public float cylinderRadius = 5f;
     public int numberOfCylinders = 3; // Update the number of cylinders
@@ -80,17 +81,18 @@ public class ImageCylinderSpawner : MonoBehaviour
 
     // public TMP_Text popupText;  // Assign the Text element for the message
     public Button closeButton; // Assign the Button element for closing the pop-up
-    private bool checkedForPatterns = false;
+    public bool checkedForPatterns = false;
     public Button refreshBtn;
     public static ImageCylinderSpawner INSTANCE; //Singleton Instance
     private bool _betConfirmed = false;
     public bool won = false;
 
     private bool bonusSpins = false;
-
+    public bool isClicked = false; 
     public bool CanShiftCylinder = false;
     public bool IsLastChanceToWin = false;
     private bool imagesRefreshed = false;
+    
 
     [SerializeField] private GameObject hideImage;
     [SerializeField] private GameObject hideImage1;
@@ -164,6 +166,11 @@ public class ImageCylinderSpawner : MonoBehaviour
             {
                 checkedForPatterns = false;
             }
+        }
+
+        if (CanShiftCylinder)
+        {
+            checkedForPatterns = false;
         }
     }
 
@@ -744,25 +751,30 @@ public class ImageCylinderSpawner : MonoBehaviour
 
     #region Shift Slot Cylinder
 
+    
     public void Shift()
     {
         if (CanShiftCylinder && !DoorAnim.INSTANCE.IsAnimRunning)
         {
+            //isClick = true;
             _shiftingPanel.SetActive(true);
+            Debug.Log("Shifting in if  " + CanShiftCylinder + !DoorAnim.INSTANCE.IsAnimRunning); 
            // CheckForWinningPatterns.INSTANCE.isButtonClicked = false; 
         }
+        
     }
 
-    public async void ShiftUp(int cylinderCount)
+   public async void ShiftUp(int cylinderCount)
     {
-        if (CanShiftCylinder && !DoorAnim.INSTANCE.IsAnimRunning)
-        {
-            _shiftingPanel.SetActive(false);
+       if (CanShiftCylinder && !DoorAnim.INSTANCE.IsAnimRunning) {
+           _shiftingPanel.SetActive(false);
+          // isClicked = true; 
+            //shiftpanelchecker.gameObject.SetActive(false);  
            // CheckForWinningPatterns.INSTANCE.isButtonClicked = true;
-            cylinderParents[cylinderCount].localRotation = Quaternion.AngleAxis(360 / numberOfImages, Vector3.down) *
-                                                           cylinderParents[cylinderCount].localRotation;
+           cylinderParents[cylinderCount].localRotation = Quaternion.AngleAxis(360 / numberOfImages, Vector3.down) *
+                                                        cylinderParents[cylinderCount].localRotation;
            
-            CanShiftCylinder = false;
+          CanShiftCylinder = false;
             IsLastChanceToWin = true;
             CheckWinningCondition();
           
@@ -775,20 +787,24 @@ public class ImageCylinderSpawner : MonoBehaviour
             //    await Task.Delay((int)_swapSpeed * 100);
             //}
           
-        }
+       } 
     }
 
     public void Shift_Left()
     {
+        
         _button_left.interactable = false;
         _button_right.interactable = false;
+       // shiftpanelchecker.gameObject.SetActive(false); 
         StartCoroutine(Cor_Shift_Left());
     }
 
     public void Shift_Right()
     { 
+        
         _button_left.interactable = false;
         _button_right.interactable = false;
+       // shiftpanelchecker.gameObject.SetActive(false); 
         StartCoroutine(Cor_Shift_Right());
     }
 
@@ -797,7 +813,9 @@ public class ImageCylinderSpawner : MonoBehaviour
         if (CanShiftCylinder && !DoorAnim.INSTANCE.IsAnimRunning)
         {
             _shiftingPanel.SetActive(false);
-            //checkForWinningPatterns. isButtonClicked = true;  
+         //   shiftpanelchecker.SetActive(true);
+           // isClicked = true; 
+            
             Vector3[] startPositions = new Vector3[4];
             Vector3[] targetPositions = new Vector3[4];
 
@@ -836,15 +854,19 @@ public class ImageCylinderSpawner : MonoBehaviour
 
             CanShiftCylinder = false;
             IsLastChanceToWin = true;
+           // if (!shiftpanelchecker.gameObject.activeInHierarchy)
+           // {
+                CheckWinningCondition();
+          //  }
          
-            CheckWinningCondition();
+            
         }
     }
     public void CheckWinningCondition()
     {
        // if(_shiftingPanel.activeInHierarchy == false  &&  CheckForWinningPatterns.INSTANCE.isButtonClicked== true)
       //  {
-             if (CheckForWinningPatterns.INSTANCE != null) { 
+             if (CheckForWinningPatterns.INSTANCE != null ) { 
                  CheckForWinningPatterns.INSTANCE.CheckPatterns(); 
                  checkedForPatterns = true;
              }
@@ -856,7 +878,9 @@ public class ImageCylinderSpawner : MonoBehaviour
         if (CanShiftCylinder && !DoorAnim.INSTANCE.IsAnimRunning)
         {
             _shiftingPanel.SetActive(false);
-            //CheckForWinningPatterns.INSTANCE.isButtonClicked = true;
+           // shiftpanelchecker.SetActive(true);
+           // isClicked = true; 
+           
             Vector3[] startPositions = new Vector3[4];
             Vector3[] targetPositions = new Vector3[4];
 
@@ -896,7 +920,10 @@ public class ImageCylinderSpawner : MonoBehaviour
             CanShiftCylinder = false;
             IsLastChanceToWin = true;
           
-             CheckWinningCondition();
+            //if (!shiftpanelchecker.gameObject.activeInHierarchy)
+            //{
+                CheckWinningCondition();
+           // }
             
         }
     }
@@ -981,6 +1008,8 @@ public class ImageCylinderSpawner : MonoBehaviour
         if (CanShiftCylinder && !DoorAnim.INSTANCE.IsAnimRunning)
         {
             _shiftingPanel.SetActive(false);
+           // shiftpanelchecker.SetActive(true);
+            //isClicked = true; 
             //CheckForWinningPatterns.INSTANCE.isButtonClicked = true; 
             cylinderParents[cylinderCount].localRotation = Quaternion.AngleAxis(360 / numberOfImages, Vector3.up) *
                                                            cylinderParents[cylinderCount].localRotation;

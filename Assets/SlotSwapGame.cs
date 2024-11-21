@@ -5,6 +5,7 @@ namespace SK2Gameplays
     public class SlotSwapGame : MonoBehaviour
     {
         private int? _selectedCylinder;
+        public GameObject shiftpanelchecker; 
 
         void Update()
         {
@@ -14,11 +15,13 @@ namespace SK2Gameplays
 
                 if (touch.phase == TouchPhase.Began)
                 {
+                    //shiftpanelchecker.SetActive(false);  
                     TouchShift();
                 }
             }
             else if (Input.GetMouseButtonDown(0))
             {
+               // shiftpanelchecker.gameObject.SetActive(false); 
                 TouchShift();
                 
                 

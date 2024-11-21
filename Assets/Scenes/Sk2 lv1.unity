@@ -3750,6 +3750,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3e12e5e3da36194f8327ad8e7d9395c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shiftpanelchecker: {fileID: 0}
 --- !u!4 &346442242
 Transform:
   m_ObjectHideFlags: 0
@@ -7623,6 +7624,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ForthRow: []
+  shiftpanelchecker: {fileID: 0}
   raycastPatterns:
   - listName: First Coloumn
     raycastOrigins:
@@ -9731,7 +9733,7 @@ MonoBehaviour:
     - Item: 4
       Probability: 0
     - Item: 0
-      Probability: 5
+      Probability: 0
   jackpotOccurPosition:
   - {fileID: 541799898}
   - {fileID: 999525428}
@@ -9760,6 +9762,7 @@ MonoBehaviour:
   - {fileID: 1659626681397210405, guid: 5d6a29d3da93a6847b452fab6b0937be, type: 3}
   - {fileID: 15807688271875325, guid: f3db5654f5b6b164ab523a4b311f9af6, type: 3}
   - {fileID: 3006844835349394465, guid: f597f5f8ec9732c4291a76fbe27cc3f2, type: 3}
+  shiftpanelchecker: {fileID: 0}
   numberOfImages: 12
   cylinderRadius: 1.55
   numberOfCylinders: 4
@@ -9802,8 +9805,10 @@ MonoBehaviour:
   CylinderSpawning: 0
   popupPanel: {fileID: 953551783}
   closeButton: {fileID: 2044868775}
+  checkedForPatterns: 0
   refreshBtn: {fileID: 734478253}
   won: 0
+  isClicked: 0
   CanShiftCylinder: 0
   IsLastChanceToWin: 0
   hideImage: {fileID: 529650616}
@@ -13428,6 +13433,7 @@ MonoBehaviour:
   _readCube: {fileID: 0}
   _cubeState: {fileID: 0}
   prizeNameText: {fileID: 592134950}
+  ics: {fileID: 0}
 --- !u!114 &952525973
 MonoBehaviour:
   m_ObjectHideFlags: 0

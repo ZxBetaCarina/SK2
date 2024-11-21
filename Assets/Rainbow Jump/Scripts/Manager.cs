@@ -21,7 +21,7 @@ namespace RainbowJump.Scripts
         public Text highScoreText; // reference to the UI text for displaying the high score
 
         public float score = 0f;
-        public float highScore = 0f; // variable to hold the high score
+        private float highScore = 0f; // variable to hold the high score
 
         public bool gameOver = false;
 
@@ -42,7 +42,7 @@ namespace RainbowJump.Scripts
         public AudioClip buttonSound;
         private AudioSource audioSource;
         private float previousYPosition = 0f;
-        private GameController gameController;  
+        //private GameController gameController;  
 
         // Start is called before the first frame update
         void Start()
@@ -52,12 +52,14 @@ namespace RainbowJump.Scripts
             playerMovement.rb.simulated = false;
 
             audioSource = GetComponent<AudioSource>();
-            gameController = GetComponent<GameController>();
+            //gameController = GetComponent<GameController>();
 
             RestartGame();
             
             // Load the high score from PlayerPrefs and display it in the UI
-            //highScore = PlayerPrefs.GetFloat("HighScore", 0f);
+           // highScore = PlayerPrefs.GetFloat("hs", 0f);
+           
+            Debug.Log("hs"+highScore);   
             highScoreText.text = "Score: " + highScore.ToString("0");
             
         }
@@ -83,8 +85,8 @@ namespace RainbowJump.Scripts
                     highScore = score;
                     highScoreText.text = "Score: " + highScore.ToString("0");
                     highScore = (int)Mathf.Round(highScore);
-                    PlayerPrefs.SetFloat("highScore", highScore);
-                    Debug.Log("High Score: " + highScore);      
+                    PlayerPrefs.SetFloat("hs", highScore);
+                    //Debug.Log("High Score: " + highScore);      
                     PlayerPrefs.Save();
                 }
             }
@@ -137,7 +139,7 @@ namespace RainbowJump.Scripts
             spawner.DestroyAllObstacles();
             spawner.InitializeObstacles();
             score = 0f;
-            highScore = PlayerPrefs.GetFloat("HighScore", 0f);
+            //highScore = PlayerPrefs.GetFloat("hs", 0f);
 
             playerTrail.Clear();
         }

@@ -43,7 +43,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject freeSpinImage;
     private string _waitPrefix = "Please Wait... ";
     private string _playAgainString = "Collect";
-    private string _winningMsg = "Got It!!";
+    public string _winningMsg = " ";
     private string _losignMsg = "You Lose";
     [SerializeField] private float _winningPanelDelay = 5f;
     public bool RubicMode { get; private set; }

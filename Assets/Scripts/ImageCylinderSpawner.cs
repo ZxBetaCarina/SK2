@@ -86,6 +86,7 @@ public class ImageCylinderSpawner : MonoBehaviour
     public static ImageCylinderSpawner INSTANCE; //Singleton Instance
     private bool _betConfirmed = false;
     public bool won = false;
+    public Button minGame; 
 
     private bool bonusSpins = false;
     public bool isClicked = false; 
@@ -795,6 +796,7 @@ public class ImageCylinderSpawner : MonoBehaviour
         
         _button_left.interactable = false;
         _button_right.interactable = false;
+        CheckForWinningPatterns.INSTANCE.checkPattern = true; 
        // shiftpanelchecker.gameObject.SetActive(false); 
         StartCoroutine(Cor_Shift_Left());
     }
@@ -804,6 +806,7 @@ public class ImageCylinderSpawner : MonoBehaviour
         
         _button_left.interactable = false;
         _button_right.interactable = false;
+        CheckForWinningPatterns.INSTANCE.checkPattern = true; 
        // shiftpanelchecker.gameObject.SetActive(false); 
         StartCoroutine(Cor_Shift_Right());
     }
@@ -1214,6 +1217,7 @@ public class ImageCylinderSpawner : MonoBehaviour
     public void StartBonusSpin()
     {
         UIManager.Instance._winningPanel.SetActive(false);   
+        minGame.interactable = false;    
         Debug.Log("deactivate winning panle ");
         StartCoroutine(FifteenBonusSpins());
     }

@@ -7623,6 +7623,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61731294dff2c4240b3d569821b84a15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  checkPattern: 0
   ForthRow: []
   shiftpanelchecker: {fileID: 0}
   raycastPatterns:
@@ -9733,7 +9734,7 @@ MonoBehaviour:
     - Item: 4
       Probability: 0
     - Item: 0
-      Probability: 0
+      Probability: 5
   jackpotOccurPosition:
   - {fileID: 541799898}
   - {fileID: 999525428}
@@ -9808,6 +9809,7 @@ MonoBehaviour:
   checkedForPatterns: 0
   refreshBtn: {fileID: 734478253}
   won: 0
+  minGame: {fileID: 1989892863}
   isClicked: 0
   CanShiftCylinder: 0
   IsLastChanceToWin: 0
@@ -11846,6 +11848,7 @@ MonoBehaviour:
   revealFX: {fileID: 1924045057}
   _winningFX: {fileID: 1441196120420917351, guid: 3a38fbaf9c3d0d842aad2bb0753f69ce, type: 3}
   _bettingInput: {fileID: 1313370342}
+  rainbowJump: {fileID: 1989892862}
   _grand_prize_text: {fileID: 2082464330}
   _major_prize_text: {fileID: 210340169}
   _minor_prize_text: {fileID: 307407169}
@@ -13390,7 +13393,7 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 5f559e1057cdbb4439826d9819cabe5e, type: 3}
     - {fileID: 21300000, guid: 3fbae0eaaa15a2d43a74de7252698ddc, type: 3}
     - {fileID: 21300000, guid: 4a6cd5f2e0d1e6e4a8f279027328e751, type: 3}
-    - {fileID: 4851021996735693295, guid: 1dcfa3e32f96d214d9c4e9dd32c06ca8, type: 3}
+    - {fileID: 21300000, guid: ee6c025773a537940bbf65424103f283, type: 3}
   - PrizeName: Major
     Icons:
     - {fileID: 21300000, guid: e5ca2c8149be4964a94e445517f154a8, type: 3}
@@ -13428,6 +13431,7 @@ MonoBehaviour:
   _playAgainButton: {fileID: 175545205}
   _showRubicButton: {fileID: 1718922985}
   freeSpinImage: {fileID: 618006224}
+  _winningMsg: ' '
   _winningPanelDelay: 5
   isfreespin: 0
   _readCube: {fileID: 0}

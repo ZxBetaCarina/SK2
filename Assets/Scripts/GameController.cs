@@ -20,6 +20,7 @@ public class GameController : MonoBehaviour
     private float disableDuration = 60f;
     private float timer;
     [SerializeField] private TextMeshProUGUI _bettingInput;
+    public GameObject rainbowJump;    
 
     private ImageCylinderSpawner ics;
     // [SerializeField] private TextMeshProUGUI CoolTimer;
@@ -98,7 +99,7 @@ public class GameController : MonoBehaviour
     private int _initialBet;
     public int _current_bet_index { get; private set; }
 
-    public float _currentPoints = 1000f;                // Starting points
+    public float _currentPoints ;                // Starting points
     public int _point_multiplier = 100;
 
     public int _display_points;
@@ -157,10 +158,14 @@ public class GameController : MonoBehaviour
         AvailableCredit();
 
         //PlayerPrefs.SetFloat("Balance", _currentPoints);   // ENABLE THIS TO RESET THE PLAYERPREFS WITH DEFAULT VALUE
-       
+
         if (PlayerPrefs.HasKey("Balance"))
-        { 
-            float highScore = PlayerPrefs.GetFloat("highScore");
+        {
+            // code to reset the Balance{
+            //PlayerPrefs.DeleteKey("Balance"); 
+            // Debug.Log("i am resetting balance " + PlayerPrefs.GetFloat("Balance"));}
+            
+         float highScore = PlayerPrefs.GetFloat("hs");
             _currentPoints = PlayerPrefs.GetFloat("Balance");
 
             if (highScore != 0)
@@ -168,7 +173,7 @@ public class GameController : MonoBehaviour
                 highScore = highScore / 100f; 
                 _currentPoints += highScore;  
                 PlayerPrefs.SetFloat("Balance", _currentPoints); 
-                PlayerPrefs.DeleteKey("highScore");  
+                PlayerPrefs.DeleteKey("hs");  
             }
             PlayerPrefs.Save();
             // Update the display points
@@ -277,18 +282,22 @@ public class GameController : MonoBehaviour
         _winningAudio.Play();
         _coinFx.SetActive(true);
         ImageRNGSpawner.Instance.won = true;
-        int fxcount = 0;
-        foreach (var pos in _patterns)
+        if (CheckForWinningPatterns.INSTANCE.WinningIconName != bonus1 && CheckForWinningPatterns.INSTANCE.WinningIconName != bonus2)
         {
-            if (fxcount >= 3)
+            int fxcount = 0;
+            foreach (var pos in _patterns)
             {
-                break;  
+                if (fxcount >= 3)
+                {
+                    break;
+                }
+
+                Debug.Log("Instantiating FX at position: " + pos);
+                GameObject fx = Instantiate(_pattern_FX, pos, Quaternion.identity);
+                Destroy(fx, 2.5f);
+                fxcount++;
+
             }
-            Debug.Log("Instantiating FX at position: " + pos);
-            GameObject fx = Instantiate(_pattern_FX, pos, Quaternion.identity);
-            Destroy(fx, 3f);
-            fxcount++;  
-            
         }
 
         if (UIManager.Instance.RubicMode)
@@ -321,14 +330,14 @@ public class GameController : MonoBehaviour
             }
             _currentPoints += winningAmount;
 
-            _display_points = (int)_currentPoints * _point_multiplier;
+            _display_points = (int)Mathf.Round(_currentPoints * _point_multiplier); //(int)_currentPoints * _point_multiplier;
         }
         else if (JackPotMode)
         {
             //float winningAmount = _jackPotModeWinningMultiple * _betPoints[_current_bet_index] / 100;
             float winningAmount =_betPoints[_current_bet_index];
             _currentPoints += winningAmount;
-            _display_points = (int)_currentPoints * _point_multiplier;
+            _display_points = (int)Mathf.Round(_currentPoints * _point_multiplier);  //(int)_currentPoints * _point_multiplier;
             JackPotMode = false;
         }
         else
@@ -352,6 +361,7 @@ public class GameController : MonoBehaviour
         _patterns = new();
         if (CheckForWinningPatterns.INSTANCE.WinningIconName == bonus1)
         {
+            rainbowJump.GetComponent<Rainbow_Jump>().enabled = false; 
             RestartLevel.gameObject.SetActive(false);
         }
         else if (CheckForWinningPatterns.INSTANCE.WinningIconName == bonus2)
@@ -581,27 +591,23 @@ public class GameController : MonoBehaviour
         _bettingInput.text = _bet_intervals_in_usd[_current_bet_index] + "USD";
         _totalBet.text = _betPoints[_current_bet_index] + "Pts";
 
-        float temp = PlayerPrefs.GetFloat("Balance");
+       float temp = PlayerPrefs.GetFloat("Balance");
         if (temp == 0f)
         {
-          PlayerPrefs.SetFloat("Balance",1000f);
-          
+            PlayerPrefs.SetFloat("Balance", 10f);
         }
-       else 
-        { _display_points = (int)Mathf.Round(temp * _point_multiplier);}
-        Debug.Log("cuurent balance"+ temp);
-        
+        else
+        {
+         _display_points = (int)Mathf.Round(temp* _point_multiplier);
+        }
 
         print(_display_points);
-        print("Update Points 4");
         _currentPointsText.text = _display_points + "";
-        
+        timer = 0;
+        // print("Update Points 4");
+        //timerText.text = " ";
         //NormalPaytable.gameObject.SetActive(true);
         //FollowPaytable.gameObject.SetActive(false);
-        
-        timer = 0;
-        
-        //timerText.text = " ";
 
     }
     

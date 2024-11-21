@@ -227,10 +227,7 @@ namespace SK2
             if (!_checking)
             {
                 _isJackPotMode = GameController.Instance.JackPotMode;
-                
                     StartCoroutine(CheckForPatterns());
-                
-               
             }
         }
 

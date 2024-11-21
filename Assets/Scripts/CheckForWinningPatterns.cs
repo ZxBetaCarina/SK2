@@ -26,8 +26,9 @@ public enum JackpotTypes
 
 public class CheckForWinningPatterns : MonoBehaviour
 {
+    [SerializeField] public bool checkPattern;
     public List<Transform> ForthRow;
-    public GameObject shiftpanelchecker; 
+    public GameObject shiftpanelchecker;
 
     public List<RaycastOriginTransforms> raycastPatterns;
     public static CheckForWinningPatterns INSTANCE;
@@ -37,10 +38,11 @@ public class CheckForWinningPatterns : MonoBehaviour
     [SerializeField] private GameObject reviewImgParent;
     [SerializeField] private Button reviewBtn;
     [SerializeField] private TMP_Text reviewText;
-    
 
-    [Header("Bonus and Jackpot Icon")]
-    [SerializeField] private Sprite bonus1;
+
+    [Header("Bonus and Jackpot Icon")] [SerializeField]
+    private Sprite bonus1;
+
     [SerializeField] private Sprite bonus2;
     /*[SerializeField] private Sprite bonus2;
     [SerializeField] private Sprite bonus3;
@@ -49,7 +51,7 @@ public class CheckForWinningPatterns : MonoBehaviour
     [SerializeField] private Sprite jackpotGrand;*/
 
     public static Action CoolDownRubicButton;
-  //  public ImageCylinderSpawner ics;
+    //  public ImageCylinderSpawner ics;
 
     public static Action PatternFound;
     public static Action PatternNotFound;
@@ -57,7 +59,7 @@ public class CheckForWinningPatterns : MonoBehaviour
     private bool _isJackPotMode = false;
     private bool _checking = false;
     private bool isLastSpin = false;
-    public bool isfreespin = false;     
+    public bool isfreespin = false;
     public bool isButtonClicked = false;
     private bool isReviewActive = false;
 
@@ -69,7 +71,6 @@ public class CheckForWinningPatterns : MonoBehaviour
 
     private void Awake()
     {
-
         if (INSTANCE == null)
         {
             INSTANCE = this;
@@ -82,7 +83,7 @@ public class CheckForWinningPatterns : MonoBehaviour
 
     public void Start()
     {
-       // ics = GetComponent<ImageCylinderSpawner>();
+        // ics = GetComponent<ImageCylinderSpawner>();
     }
 
     public void FinaliseBet()
@@ -102,6 +103,7 @@ public class CheckForWinningPatterns : MonoBehaviour
         {
             return;
         }
+
         StartCoroutine(ShowImages());
     }
 
@@ -129,6 +131,7 @@ public class CheckForWinningPatterns : MonoBehaviour
 
                 yield break;
             }
+
             yield return new WaitForSeconds(.1f);
         }
 
@@ -158,26 +161,23 @@ public class CheckForWinningPatterns : MonoBehaviour
 
     private void OnRubicMoved()
     {
-       
-            {
-                if (!_checking )
-                    StartCoroutine(nameof(CheckForPatterns));
-
-            }
-
-       
+        {
+            if (!_checking)
+                StartCoroutine(nameof(CheckForPatterns));
+        }
     }
 
     public IEnumerator CheckForPatterns()
     {
         // have to add the game object here 
-        
+
         if (_checking) yield break;
 
-          
+
         _checking = true;
         //yield return new WaitForSeconds(.1f);
-       
+        if (checkPattern)
+        {
             foreach (var raycastOrigins in raycastPatterns)
             {
                 CheckPatternsInList(raycastOrigins.raycastOrigins);
@@ -185,75 +185,73 @@ public class CheckForWinningPatterns : MonoBehaviour
             }
 
             Debug.Log("Total Patterns = " + noOfPatterns);
+        }
 
-            if (isBonus)
+
+        if (isBonus)
+        {
+            if (noOfPatterns >= 1)
             {
+                PatternFound?.Invoke();
+                ImageCylinderSpawner.INSTANCE.won = false;
+            }
 
-                if (noOfPatterns >= 1)
-                {
-                    PatternFound?.Invoke();
-                    ImageCylinderSpawner.INSTANCE.won = false;
-                }
+            yield return new WaitForSeconds(2f);
+            print("Start Fifteen spins");
+            ImageCylinderSpawner.INSTANCE.StartBonusSpin();
 
+            spinCounts--;
+
+            leftSpinsText.text = spinCounts + "/" + 15;
+
+            _checking = false;
+
+
+            if (spinCounts < 1)
+            {
+                isBonus = false;
+                isLastSpin = true;
+            }
+
+
+            noOfPatterns = 0;
+            yield break;
+        }
+
+        /*if (isBonus)
+        {
+           isBonus = false;
+        }*/
+
+        if (noOfPatterns >= 1 && !_isJackPotMode)
+        {
+            PatternFound?.Invoke();
+        }
+        else if (noOfPatterns >= 1 && _isJackPotMode)
+        {
+            PatternFound?.Invoke();
+            GameController.Instance.JackPotWinning();
+        }
+        else
+        {
+            if (isLastSpin)
+            {
+                leftSpins.SetActive(false);
                 yield return new WaitForSeconds(2f);
-                print("Start Fifteen spins");
-                ImageCylinderSpawner.INSTANCE.StartBonusSpin();
-
-                spinCounts--;
-
-                leftSpinsText.text = spinCounts + "/" + 15;
-
-                _checking = false;
-
-
-
-                if (spinCounts < 1)
-                {
-                    isBonus = false;
-                    isLastSpin = true;
-                }
-
-
-                noOfPatterns = 0;
-                yield break;
-            }
-
-            /*if (isBonus)
-            {
-               isBonus = false;
-            }*/
-
-            if (noOfPatterns >= 1 && !_isJackPotMode)
-            {
-                PatternFound?.Invoke();
-            }
-            else if (noOfPatterns >= 1 && _isJackPotMode)
-            {
-                PatternFound?.Invoke();
-                GameController.Instance.JackPotWinning();
+                Debug.Log("CurrentBetIndex 4 " + PlayerPrefs.GetFloat("CurrentBetIndex"));
+                SceneManager.LoadScene(1);
             }
             else
             {
-                if (isLastSpin)
-                {
-                    leftSpins.SetActive(false);
-                    yield return new WaitForSeconds(2f);
-                    Debug.Log("CurrentBetIndex 4 " + PlayerPrefs.GetFloat("CurrentBetIndex"));
-                    SceneManager.LoadScene(1);
-                }
-                else
-                {
-                    PatternNotFound?.Invoke();
-
-                }
+                PatternNotFound?.Invoke();
             }
+        }
 
-            _isJackPotMode = false;
+        _isJackPotMode = false;
 
-            noOfPatterns = 0;
-            _checking = false;
-            CoolDownRubicButton?.Invoke();
-        
+        noOfPatterns = 0;
+        _checking = false;
+        CoolDownRubicButton?.Invoke();
     }
 
     public void DisableLastRow()
@@ -264,104 +262,98 @@ public class CheckForWinningPatterns : MonoBehaviour
     public void CheckPatterns()
     {
         // Debug.Log("Checking Patterns outside ");    
-            if (!_checking && ImageCylinderSpawner.INSTANCE.CanShiftCylinder == false) 
-            {
-                _isJackPotMode = GameController.Instance.JackPotMode;
-                Debug.Log("Checking Patterns inside ");   
-                StartCoroutine(CheckForPatterns());
-            }
-            
-        
-
+        if (!_checking && ImageCylinderSpawner.INSTANCE.CanShiftCylinder == false)
+        {
+            _isJackPotMode = GameController.Instance.JackPotMode;
+            //Debug.Log("Checking Patterns inside ");
+            StartCoroutine(CheckForPatterns());
+        }
     }
+
     private void CheckPatternsInList(List<Transform> transformList)
     {
         int matchCount = 0;
-            Sprite prevSprite = null;
-            List<Vector3> detected = new List<Vector3>();
-           
+        Sprite prevSprite = null;
+        List<Vector3> detected = new List<Vector3>();
 
-            for (int i = 0; i < transformList.Count; i++)
+
+        for (int i = 0; i < transformList.Count; i++)
+        {
+            if (!transformList[i].gameObject.activeInHierarchy) continue;
+
+            RaycastHit2D detectedObject = Physics2D.Raycast(transformList[i].position, Vector3.forward);
+
+            if (detectedObject.transform != null)
             {
-                if (!transformList[i].gameObject.activeInHierarchy) continue;
+                Sprite currentSprite = detectedObject.collider.GetComponent<SpriteRenderer>().sprite;
 
-                RaycastHit2D detectedObject = Physics2D.Raycast(transformList[i].position, Vector3.forward);
-
-                if (detectedObject.transform != null)
+                // Check if starting new pattern or continuing an existing one
+                if (matchCount == 0 || prevSprite == currentSprite)
                 {
-                    Sprite currentSprite = detectedObject.collider.GetComponent<SpriteRenderer>().sprite;
-
-                    // Check if starting new pattern or continuing an existing one
-                    if (matchCount == 0 || prevSprite == currentSprite)
-                    {
-                        matchCount++;
-                        detected.Add(detectedObject.transform.position);
-                        prevSprite = currentSprite;
-                    }
-                    else
-                    {
-                        // Reset if sprites don’t match
-                        matchCount = 1;
-                        prevSprite = currentSprite;
-                        detected = new List<Vector3> { detectedObject.transform.position };
-                    }
-
-                    // Confirm pattern only if exactly 3 consecutive matches
-                    if (matchCount == 3)
-                    {
-                        noOfPatterns++;
-                        WinningIconName = prevSprite;
-                        //Debug.Log($"''''''''''''''''''''''''''''''''''''''' {WinningIconName}");
-
-
-                        // Handle special sprites for bonus logic
-                        if (prevSprite == bonus1)
-                        {
-                            GameController.Instance.RestartLevel.gameObject.SetActive(false);
-                            StartCoroutine(DelayFreeSpin());
-                        }
-                        else if (prevSprite == bonus2)
-                        {
-                            if (isfreespin == false)
-                            {
-                                StartCoroutine(Bonus2start());
-                            }
-                            else
-                            {
-                                StopCoroutine(Bonus2start());
-                            }
-                            
-                        }
-                        else
-                        {
-                            foreach (var pattern in detected)
-                           {
-                                // Check if there is already a pattern selected, if not, add the first one found
-                                
-                                    GameController.Instance._patterns.Add(pattern);
-                                    Debug.Log("Pattern detected: " + pattern);
-                                    Debug.Log("Pattern Found");
-                               
-                          }
-                        }
-
-                        // Reset to allow detection of additional patterns
-                        matchCount = 0;
-                        detected.Clear();
-                    }
+                    matchCount++;
+                    detected.Add(detectedObject.transform.position);
+                    prevSprite = currentSprite;
                 }
                 else
                 {
-                    // Reset if no object detected in raycast
-                    matchCount = 0;
-                    detected.Clear();
-                    prevSprite = null;
+                    // Reset if sprites don’t match
+                    matchCount = 1;
+                    prevSprite = currentSprite;
+                    detected = new List<Vector3> { detectedObject.transform.position };
                 }
 
+                // Confirm pattern only if exactly 3 consecutive matches
+                if (matchCount == 3)
+                {
+                    noOfPatterns++;
+                    WinningIconName = prevSprite;
+                    //Debug.Log($"''''''''''''''''''''''''''''''''''''''' {WinningIconName}");
+
+
+                    // Handle special sprites for bonus logic
+                    if (prevSprite == bonus1)
+                    {
+                        GameController.Instance.RestartLevel.gameObject.SetActive(false);
+                        StartCoroutine(DelayFreeSpin());
+                    }
+                    else if (prevSprite == bonus2)
+                    {
+                        if (isfreespin == false)
+                        {
+                            StartCoroutine(Bonus2start());
+                        }
+                        else
+                        {
+                            StopCoroutine(Bonus2start());
+                        }
+                    }
+                    else
+                    {
+                        foreach (var pattern in detected)
+                        {
+                            // Check if there is already a pattern selected, if not, add the first one found
+
+                            GameController.Instance._patterns.Add(pattern);
+                            Debug.Log("Pattern detected: " + pattern);
+                            Debug.Log("Pattern Found");
+                        }
+                    }
+
+                    // Reset to allow detection of additional patterns
+                    matchCount = 0;
+                    detected.Clear();
+                }
             }
-        
+            else
+            {
+                // Reset if no object detected in raycast
+                matchCount = 0;
+                detected.Clear();
+                prevSprite = null;
+            }
+        }
     }
-    
+
     private IEnumerator Bonus2start()
     {
         yield return new WaitForSeconds(2f);
@@ -376,7 +368,7 @@ public class CheckForWinningPatterns : MonoBehaviour
         StartCoroutine(ShowDelaysSpinsLeft());
         print("Is Bonus True");
         isBonus = true;
-        isfreespin = true;  
+        isfreespin = true;
         StartCoroutine(CheckForPatterns());
     }
 
@@ -397,90 +389,90 @@ public class CheckForWinningPatterns : MonoBehaviour
     public void OnRevealEnabled()
     {
         //while (_checking)
-       // {
+        // {
 
-       // }
+        // }
 
         StartCoroutine(nameof(CheckForPatterns));
     }
-        /*private void CheckPatternsInList(List<Transform> transformList)
-    {
-        int matchCount = 0;
-        Sprite prevSprite = null;
-        int listsize = transformList.Count;
-        List<Vector3> detected = new List<Vector3>();
+    /*private void CheckPatternsInList(List<Transform> transformList)
+{
+    int matchCount = 0;
+    Sprite prevSprite = null;
+    int listsize = transformList.Count;
+    List<Vector3> detected = new List<Vector3>();
 
-        //Find patterns in ascending list order
-        for (int i = 0; i < transformList.Count; i++)
+    //Find patterns in ascending list order
+    for (int i = 0; i < transformList.Count; i++)
+    {
+        if (!transformList[i].gameObject.activeInHierarchy)
         {
-            if (!transformList[i].gameObject.activeInHierarchy)
+            //Debug.Log("Continued");
+            continue;
+        }
+        RaycastHit2D detectedObject = Physics2D.Raycast(transformList[i].position, Vector3.forward);
+        //detect first image for the pattern
+        if (matchCount == 0)
+        {
+            if (detectedObject.transform != null)
             {
-                //Debug.Log("Continued");
-                continue;
+                //matchCount = 1 for first detected image in the pattern
+                matchCount++;
+                prevSprite = detectedObject.collider.GetComponent<SpriteRenderer>().sprite;
+                detected.Add(detectedObject.transform.position);
             }
-            RaycastHit2D detectedObject = Physics2D.Raycast(transformList[i].position, Vector3.forward);
-            //detect first image for the pattern
-            if (matchCount == 0)
+        }
+
+        //already detected first image
+        else
+        {
+
+            if (detectedObject.transform != null) // 3*3
             {
-                if (detectedObject.transform != null)
+                //check name of previous image and newly detected image
+                if (prevSprite == detectedObject.collider.GetComponent<SpriteRenderer>().sprite)
                 {
-                    //matchCount = 1 for first detected image in the pattern
                     matchCount++;
-                    prevSprite = detectedObject.collider.GetComponent<SpriteRenderer>().sprite;
                     detected.Add(detectedObject.transform.position);
                 }
-            }
-
-            //already detected first image 
-            else
-            {
-
-                if (detectedObject.transform != null) // 3*3
+                else
                 {
-                    //check name of previous image and newly detected image
-                    if (prevSprite == detectedObject.collider.GetComponent<SpriteRenderer>().sprite)
+                    //name of images are not matching
+                    //strart count from one and check for other pattern
+                    matchCount = 1;
+                    prevSprite = detectedObject.collider.GetComponent<SpriteRenderer>().sprite;
+                    detected = new List<Vector3>();
+                    detected.Add(detectedObject.transform.position);
+                }
+                if (matchCount == 3 && i == transformList.Count - 1)
+                {
+                    noOfPatterns++;
+                    Debug.Log(detectedObject.transform.localPosition + " matched " + prevSprite);
+
+                    if (detectedObject.collider.GetComponent<SpriteRenderer>().sprite == bonus1)
                     {
-                        matchCount++;
-                        detected.Add(detectedObject.transform.position);
+                        StartCoroutine(DelayFreeSpin());                                        // Enable FREE Spin
+                    }
+                    else if (detectedObject.collider.GetComponent<SpriteRenderer>().sprite == bonus2)
+                    {
+                        StartCoroutine(Bonus2start());                                          // Enable Rainbow Jump
                     }
                     else
                     {
-                        //name of images are not matching
-                        //strart count from one and check for other pattern
-                        matchCount = 1;
-                        prevSprite = detectedObject.collider.GetComponent<SpriteRenderer>().sprite;
-                        detected = new List<Vector3>();
-                        detected.Add(detectedObject.transform.position);
-                    }
-                    if (matchCount == 3 && i == transformList.Count - 1)        
-                    {
-                        noOfPatterns++;
-                        Debug.Log(detectedObject.transform.localPosition + " matched " + prevSprite);
 
-                        if (detectedObject.collider.GetComponent<SpriteRenderer>().sprite == bonus1)
+                        foreach (var pattern in detected)
                         {
-                            StartCoroutine(DelayFreeSpin());                                        // Enable FREE Spin
-                        }
-                        else if (detectedObject.collider.GetComponent<SpriteRenderer>().sprite == bonus2)
-                        {
-                            StartCoroutine(Bonus2start());                                          // Enable Rainbow Jump
-                        }
-                        else
-                        {
-
-                            foreach (var pattern in detected)
+                            Debug.Log(detected.Count);
+                            if (GameController.Instance != null)
                             {
-                                Debug.Log(detected.Count);
-                                if (GameController.Instance != null)
-                                {
-                                    GameController.Instance._patterns.Add(pattern);
-                                    Debug.Log("Pattern Found");
-                                }
+                                GameController.Instance._patterns.Add(pattern);
+                                Debug.Log("Pattern Found");
                             }
                         }
                     }
                 }
             }
         }
-    }*/
+    }
+}*/
 }

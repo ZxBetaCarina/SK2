@@ -156,6 +156,7 @@ public class CheckForWinningPatterns : MonoBehaviour
 
     private void OnDisable()
     {
+        
         RubikCubeController.RubicMoved -= OnRubicMoved;
     }
 
@@ -307,7 +308,7 @@ public class CheckForWinningPatterns : MonoBehaviour
                 {
                     noOfPatterns++;
                     WinningIconName = prevSprite;
-                    //Debug.Log($"''''''''''''''''''''''''''''''''''''''' {WinningIconName}");
+                    Debug.Log("" + WinningIconName);
 
 
                     // Handle special sprites for bonus logic
@@ -331,8 +332,9 @@ public class CheckForWinningPatterns : MonoBehaviour
                     {
                         foreach (var pattern in detected)
                         {
-                            // Check if there is already a pattern selected, if not, add the first one found
-
+                            // Check if there is already a pattern selected, if not, add the first one found.
+                            // if have to add the min or max reward one will add here. 
+                            
                             GameController.Instance._patterns.Add(pattern);
                             Debug.Log("Pattern detected: " + pattern);
                             Debug.Log("Pattern Found");

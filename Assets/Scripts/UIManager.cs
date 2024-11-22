@@ -25,7 +25,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private float balanceInsuffucientPanelActiveForSec;
 
     [SerializeField] private TextMeshProUGUI handsPlayed;
-
+ 
     [SerializeField] public GameObject _winningPanel;
     [SerializeField] private TextMeshProUGUI _winningText;
     [SerializeField] private TMP_Text _message;
@@ -35,6 +35,7 @@ public class UIManager : MonoBehaviour
     // [SerializeField] private GameObject _muteButton;
     [SerializeField] private GameObject _followPanel;
     [SerializeField] private Button _spinButton;
+    public Button minigameButton;   
     [SerializeField] private Button NormalPaytable;
     [SerializeField] private Button FollowPaytable;
     [SerializeField] private Button _refreshButton;
@@ -283,7 +284,8 @@ public class UIManager : MonoBehaviour
         if (isfreespin)
         {
             Debug.Log("Free Spin active, hiding winning panel.");
-            _winningPanel.SetActive(false);  // Hide winning panel during free spin
+            _winningPanel.SetActive(false);
+            minigameButton.interactable = false;// Hide winning panel during free spin
             yield break;  // Exit the coroutine early
         }
         _playAgainButton.interactable = false;
@@ -299,12 +301,14 @@ public class UIManager : MonoBehaviour
                 print("JACKPOT HIT");
                 print("Winning Panel");
                 _winningPanel.SetActive(false);
+                minigameButton.interactable = true;
         }
         else
         {
             print("JACKPOT HIT");
             print("Winning Panel");
             _winningPanel.SetActive(true);
+            minigameButton.interactable = false; 
         }
             // _winningText.text = text;
             //  _message.text = "";

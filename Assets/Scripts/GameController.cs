@@ -293,6 +293,7 @@ public class GameController : MonoBehaviour
         ImageRNGSpawner.Instance.won = true;
         if (CheckForWinningPatterns.INSTANCE.WinningIconName != bonus1 && CheckForWinningPatterns.INSTANCE.WinningIconName != bonus2)
         {
+            // if have to add the min or max reward one will add here 
             int fxcount = 0;
             foreach (var pos in _patterns)
             {

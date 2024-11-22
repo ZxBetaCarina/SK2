@@ -9783,6 +9783,7 @@ MonoBehaviour:
   - 300
   - 330
   - 360
+  miniGameButton: {fileID: 1989892863}
   _isRotating: 0
   cylinderParents: []
   cylinderSpawnPoints: []
@@ -13424,6 +13425,7 @@ MonoBehaviour:
   _revealbutton: {fileID: 1846001955}
   _followPanel: {fileID: 882000957}
   _spinButton: {fileID: 1105410678}
+  minigameButton: {fileID: 0}
   NormalPaytable: {fileID: 629713007}
   FollowPaytable: {fileID: 789320240}
   _refreshButton: {fileID: 734478253}

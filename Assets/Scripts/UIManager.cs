@@ -285,7 +285,7 @@ public class UIManager : MonoBehaviour
         {
             Debug.Log("Free Spin active, hiding winning panel.");
             _winningPanel.SetActive(false);
-            minigameButton.interactable = false;// Hide winning panel during free spin
+          //  minigameButton.interactable = false;// Hide winning panel during free spin
             yield break;  // Exit the coroutine early
         }
         _playAgainButton.interactable = false;
@@ -301,14 +301,14 @@ public class UIManager : MonoBehaviour
                 print("JACKPOT HIT");
                 print("Winning Panel");
                 _winningPanel.SetActive(false);
-                minigameButton.interactable = true;
+              //  minigameButton.interactable = true;
         }
         else
         {
             print("JACKPOT HIT");
             print("Winning Panel");
             _winningPanel.SetActive(true);
-            minigameButton.interactable = false; 
+          //  minigameButton.interactable = false; 
         }
             // _winningText.text = text;
             //  _message.text = "";

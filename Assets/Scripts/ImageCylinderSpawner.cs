@@ -40,6 +40,7 @@ public class ImageCylinderSpawner : MonoBehaviour
     public float CylinderStopInterval = 1f;
     public float distanceBetweenCylinders = 2f; // Distance between cylinders
     public float[] rotations;
+    public Button miniGameButton;   
     public bool _isRotating = false;
     public Transform[] cylinderParents;
     public Vector3[] cylinderSpawnPoints;
@@ -162,6 +163,7 @@ public class ImageCylinderSpawner : MonoBehaviour
     {
         if (_isRotating)
         {
+            miniGameButton.interactable = false;
             RotateCylinders();
             if (checkedForPatterns)
             {
@@ -173,6 +175,7 @@ public class ImageCylinderSpawner : MonoBehaviour
         {
             checkedForPatterns = false;
         }
+      
     }
 
     private void OnBetChanged()
@@ -664,7 +667,13 @@ public class ImageCylinderSpawner : MonoBehaviour
         if (_isRotating)
         {
             if (!CheckForWinningPatterns.INSTANCE.isBonus)
+            {
                 StartCoroutine(DoorAnim.INSTANCE.DoorTrigger());
+                miniGameButton.interactable = true; 
+            }
+            
+
+            
         }
 
         //if (currentSpinJackpot != JackpotTypes.None)
@@ -718,6 +727,7 @@ public class ImageCylinderSpawner : MonoBehaviour
         }
 
         _spinButton.gameObject.SetActive(false);
+        miniGameButton.interactable = false; 
 
         //TODO:Winning Checked Here
        CheckWinningCondition();

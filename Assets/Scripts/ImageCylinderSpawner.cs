@@ -32,7 +32,7 @@ public class ImageCylinderSpawner : MonoBehaviour
     private LayerMask _imageLayer;
 
     public GameObject[] imagePrefabs; // Array to hold different sets of image prefabs
-    public GameObject shiftpanelchecker; 
+   // public GameObject shiftpanelchecker; 
     public int numberOfImages = 21;
     public float cylinderRadius = 5f;
     public int numberOfCylinders = 3; // Update the number of cylinders

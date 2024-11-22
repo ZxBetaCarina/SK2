@@ -29,7 +29,7 @@ public class GameController : MonoBehaviour
     [SerializeField] public  TMP_Text _major_prize_text;
     [SerializeField] public TMP_Text _minor_prize_text;
 
-    [SerializeField]public float _grand_prize_value;
+    [SerializeField]public float _grand_prize_value = 100f ;
     [SerializeField]public float _major_prize_value;
     [SerializeField]public float _minor_prize_value;
 
@@ -132,7 +132,8 @@ public class GameController : MonoBehaviour
         });
         
         _current_bet_index = PlayerStats.Instance.CurrentBetIndex;
-       
+       Debug.Log("grand price value"+ _grand_prize_value);   
+
     }
 
     private void OnEnable()
@@ -144,18 +145,26 @@ public class GameController : MonoBehaviour
     {
         CheckForWinningPatterns.PatternFound -= OnPatternFound;
     }
+     
+    // This is called whenever a value is modified in the Inspector
+    private void OnValidate()
+    {
+        _grand_prize_value = _grand_prize_initial_value; 
+    }
+    
 
     void Start()
     {
         //QualitySettings.vSyncCount = 50;
         //Application.targetFrameRate = 50;
-       
+        _grand_prize_value = _grand_prize_initial_value;
         PlayerStats.Instance.GameStartedOnce();
         JackPotMode = false;
         _jackpotModepanel.SetActive(false);
         disableButton.onClick.AddListener(DisableObject);
         InitiateBet();
         AvailableCredit();
+          
 
         //PlayerPrefs.SetFloat("Balance", _currentPoints);   // ENABLE THIS TO RESET THE PLAYERPREFS WITH DEFAULT VALUE
 
@@ -324,7 +333,7 @@ public class GameController : MonoBehaviour
                     break;
 
                 case JackpotTypes.Grand:
-                    winningAmount = _grand_prize_value / _point_multiplier;
+                    winningAmount =_grand_prize_value / _point_multiplier;
                     print(winningAmount);
                     break;
             }
@@ -484,8 +493,8 @@ public class GameController : MonoBehaviour
 
             ++_current_bet_index;
             _grand_prize_value =_grand_prize_initial_value * (_current_bet_index == 0 ? 1 : (5 * _current_bet_index));
-            _grand_prize_text.text = _grand_prize_value.ToString();
-            PlayerPrefs.SetFloat("_grand_prize_value", _grand_prize_value);
+            _grand_prize_text.text =_grand_prize_value.ToString();
+            PlayerPrefs.SetFloat("_grand_prize_value",_grand_prize_value);
 
             _major_prize_value = _major_prize_initial_value * (_current_bet_index == 0 ? 1 : (5 * _current_bet_index));
             _major_prize_text.text = _major_prize_value.ToString();
@@ -517,8 +526,8 @@ public class GameController : MonoBehaviour
     {
         --_current_bet_index;
         _grand_prize_value = _grand_prize_initial_value * (_current_bet_index == 0 ? 1 : (5 * _current_bet_index));
-        PlayerPrefs.SetFloat("_grand_prize_value", _grand_prize_value);
-        _grand_prize_text.text = _grand_prize_value.ToString();
+        PlayerPrefs.SetFloat("_grand_prize_value",_grand_prize_value);
+        _grand_prize_text.text =_grand_prize_value.ToString();
         
 
         _major_prize_value = _major_prize_initial_value * (_current_bet_index == 0 ? 1 : (5 * _current_bet_index));
@@ -551,8 +560,8 @@ public class GameController : MonoBehaviour
         AvailableCredit();
         if (PlayerPrefs.HasKey("_grand_prize_value"))
         {
-            _grand_prize_value = PlayerPrefs.GetFloat("_grand_prize_value");
-            _grand_prize_text.text = _grand_prize_value.ToString();
+            _grand_prize_value= PlayerPrefs.GetFloat("_grand_prize_value");
+            _grand_prize_text.text =_grand_prize_value.ToString();
         }
         else
         {
@@ -580,7 +589,6 @@ public class GameController : MonoBehaviour
         {
             // Fallback to initial values if no saved data exists
             _minor_prize_value = _minor_prize_initial_value;
-            _grand_prize_value = _major_prize_initial_value;
             _major_prize_value = _major_prize_initial_value;    
         }
         _current_bet_index = PlayerStats.Instance.CurrentBetIndex;

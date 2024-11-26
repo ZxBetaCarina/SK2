@@ -291,7 +291,10 @@ public class GameController : MonoBehaviour
         _winningAudio.Play();
         _coinFx.SetActive(true);
         ImageRNGSpawner.Instance.won = true;
-        if (CheckForWinningPatterns.INSTANCE.WinningIconName != bonus1 && CheckForWinningPatterns.INSTANCE.WinningIconName != bonus2)
+        if (CheckForWinningPatterns.INSTANCE.WinningIconName == bonus1 &&
+            CheckForWinningPatterns.INSTANCE.WinningIconName == bonus2)
+            return;
+        else
         {
             // if have to add the min or max reward one will add here 
             int fxcount = 0;

@@ -49,7 +49,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private float _winningPanelDelay = 5f;
     public bool RubicMode { get; private set; }
     private int _movesLeft;
-    public bool isfreespin = false; 
+    public bool isfreespin = false;
+    public GameObject freespincount;
 
     [SerializeField] private ReadCube _readCube;
     [SerializeField] private CubeState _cubeState;
@@ -223,12 +224,15 @@ public class UIManager : MonoBehaviour
 
     IEnumerator FreeSpinShow()
     {
+        
+            freeSpinImage.SetActive(true);
+            isfreespin = true;
+            yield return new WaitForSeconds(2f);
+            freeSpinImage.SetActive(false);
+            isfreespin = false;
+        
        
-        freeSpinImage.SetActive(true);
-        isfreespin = true; 
-        yield return new WaitForSeconds(2f);
-        freeSpinImage.SetActive(false);
-        isfreespin = false; 
+
     }
 
     //private IEnumerator WaitForUserInput()

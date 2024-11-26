@@ -277,46 +277,60 @@ public class ImageCylinderSpawner : MonoBehaviour
 
     public void StartRotating()
     {
-        _spinButton.interactable = false;
-        print("Turn OFF SPIN in Rotating");
-        //  check if balance is sufficient, done to remove dependence on gamecontroller -> isbalancesufficient
-        float t_balance_after_test = PlayerPrefs.GetFloat(GameController.Instance._playerprefs_balance_key) -
-                                     GameController.Instance._bet_intervals_in_usd[
-                                         GameController.Instance._current_bet_index];
+         _spinButton.interactable = false;
+    print("Turn OFF SPIN in Rotating");
 
-        //if (!GameController.Instance.Is_Balance_Sufficient)
-        if (t_balance_after_test < 0)
-        {
-            UIManager.Instance.TriggerBalanceInsufficient();
-            return;
-        }
-        else
-        {
-            //  apply deduction if balance ok
-            PlayerPrefs.SetFloat(GameController.Instance._playerprefs_balance_key, t_balance_after_test);
+    // Fetch the balance from PlayerPrefs
+    float balance = PlayerPrefs.GetFloat(GameController.Instance._playerprefs_balance_key);
+    float betAmount = GameController.Instance._bet_intervals_in_usd[GameController.Instance._current_bet_index];
 
-            _difficultyFactor = GameController.Instance._current_bet_index;
-            _betConfirmed = true;
-        }
+    // Print balance and bet amount for debugging
+    print("Balance: " + balance);
+    print("Bet Amount: " + betAmount);
 
-        if (!_isRotating)
-        {
-            //GameController.Instance.FinaliseBetOnClickSpin();
-            print(t_balance_after_test);
-            GameController.Instance._currentPoints = t_balance_after_test;
-            PlayerPrefs.SetFloat("Balance", GameController.Instance._currentPoints);
+    // Calculate the balance after deducting the bet amount
+    float t_balance_after_test = balance - betAmount;
 
-            GameController.Instance._display_points = (int)Mathf.Round(GameController.Instance._currentPoints *
-                                                                       GameController.Instance._point_multiplier);
-            print(GameController.Instance._currentPoints);
+    // Print balance after deduction for debugging
+    print("Balance After Deduction: " + t_balance_after_test);
 
-            //GameController.Instance._currentPointsText.text = t_balance_after_test.ToString();
-            print("Update Points ICS");
-            print(GameController.Instance._display_points);
-            GameController.Instance._currentPointsText.text = GameController.Instance._display_points.ToString();
-            PlayerStats.Instance.HandsPlayed++;
-            UIManager.Instance.HandsPlayedIncrement(PlayerStats.Instance.HandsPlayed.ToString());
-        }
+    // Check if the balance is sufficient with a small epsilon for floating-point precision
+    float epsilon = 0.01f; // Tolerance to account for floating-point precision errors
+    if (t_balance_after_test < -epsilon)
+    {
+        UIManager.Instance.TriggerBalanceInsufficient();
+        return;
+    }
+    else
+    {
+        // Apply deduction if balance is sufficient
+        PlayerPrefs.SetFloat(GameController.Instance._playerprefs_balance_key, t_balance_after_test);
+        PlayerPrefs.Save(); // Ensure the data is saved immediately
+
+        _difficultyFactor = GameController.Instance._current_bet_index;
+        _betConfirmed = true;
+    }
+
+    // Proceed with the rotation if not already rotating
+    if (!_isRotating)
+    {
+        // Debug: Print balance and current points before updating
+        print("Balance After Deduction: " + t_balance_after_test);
+        GameController.Instance._currentPoints = t_balance_after_test;
+        PlayerPrefs.SetFloat("Balance", GameController.Instance._currentPoints);
+
+        // Calculate and update display points
+        GameController.Instance._display_points = (int)Mathf.Round(GameController.Instance._currentPoints *
+                                                                   GameController.Instance._point_multiplier);
+        print("Updated Points: " + GameController.Instance._display_points);
+
+        // Update the points text
+        GameController.Instance._currentPointsText.text = GameController.Instance._display_points.ToString();
+
+        // Increment hands played and update UI
+        PlayerStats.Instance.HandsPlayed++;
+        UIManager.Instance.HandsPlayedIncrement(PlayerStats.Instance.HandsPlayed.ToString());
+    }
     }
 
     public void DisableCylinders()
@@ -562,87 +576,87 @@ public class ImageCylinderSpawner : MonoBehaviour
             }
 
             switch (currentSpinJackpot) // Align sprites in a line to match
-        {
-            case JackpotTypes.Minor:
-                // Randomly select one function to call for Minor
-                int minorSelection = Random.Range(0, 4); // Generates a random number between 0 and 3
-                switch (minorSelection)
-                {
-                    case 0:
-                        ModifySprites(slotRNGItems.ItemsForRNG[8].Item.GetComponent<SpriteRenderer>().sprite, slots);
-                        break;
-                    case 1:
-                        ModifySprites(slotRNGItems.ItemsForRNG[9].Item.GetComponent<SpriteRenderer>().sprite, slots);
-                        break;
-                    case 2:
-                        ModifySprites(slotRNGItems.ItemsForRNG[10].Item.GetComponent<SpriteRenderer>().sprite, slots);
-                        break;  
-                    case 3:
-                        ModifySprites(slotRNGItems.ItemsForRNG[11].Item.GetComponent<SpriteRenderer>().sprite, slots);
-                        break;
-                }
-                break;
+            {
+                case JackpotTypes.Minor:
+                    // Randomly select one function to call for Minor
+                    int minorSelection = Random.Range(0, 4); // Generates a random number between 0 and 3
+                    switch (minorSelection)
+                    {
+                        case 0:
+                            ModifySprites(slotRNGItems.ItemsForRNG[8].Item.GetComponent<SpriteRenderer>().sprite, slots);
+                            break;
+                        case 1:
+                            ModifySprites(slotRNGItems.ItemsForRNG[9].Item.GetComponent<SpriteRenderer>().sprite, slots);
+                            break;
+                        case 2:
+                            ModifySprites(slotRNGItems.ItemsForRNG[10].Item.GetComponent<SpriteRenderer>().sprite, slots);
+                            break;  
+                        case 3:
+                            ModifySprites(slotRNGItems.ItemsForRNG[11].Item.GetComponent<SpriteRenderer>().sprite, slots);
+                            break;
+                    }
+                    break;
 
-            case JackpotTypes.Major:
-                // Randomly select one function to call for Major
-                int majorSelection = Random.Range(0, 4); // Generates a random number between 0 and 3
-                switch (majorSelection)
-                {
-                    case 0:
-                        ModifySprites(slotRNGItems.ItemsForRNG[4].Item.GetComponent<SpriteRenderer>().sprite, slots);
-                        break;
-                    case 1:
-                        ModifySprites(slotRNGItems.ItemsForRNG[5].Item.GetComponent<SpriteRenderer>().sprite, slots);
-                        break;
-                    case 2:
-                        ModifySprites(slotRNGItems.ItemsForRNG[6].Item.GetComponent<SpriteRenderer>().sprite, slots);
-                        break;
-                    case 3:
-                        ModifySprites(slotRNGItems.ItemsForRNG[7].Item.GetComponent<SpriteRenderer>().sprite, slots);
-                        break;
-                }
-                break;
+                case JackpotTypes.Major:
+                    // Randomly select one function to call for Major
+                    int majorSelection = Random.Range(0, 4); // Generates a random number between 0 and 3
+                    switch (majorSelection)
+                    {
+                        case 0:
+                            ModifySprites(slotRNGItems.ItemsForRNG[4].Item.GetComponent<SpriteRenderer>().sprite, slots);
+                            break;
+                        case 1:
+                            ModifySprites(slotRNGItems.ItemsForRNG[5].Item.GetComponent<SpriteRenderer>().sprite, slots);
+                            break;
+                        case 2:
+                            ModifySprites(slotRNGItems.ItemsForRNG[6].Item.GetComponent<SpriteRenderer>().sprite, slots);
+                            break;
+                        case 3:
+                            ModifySprites(slotRNGItems.ItemsForRNG[7].Item.GetComponent<SpriteRenderer>().sprite, slots);
+                            break;
+                    }
+                    break;
 
-            case JackpotTypes.Grand:
-                // Randomly select one function to call for Grand
-                int grandSelection = Random.Range(0, 4); // Generates a random number between 0 and 3
-                switch (grandSelection)
-                {
-                    case 0:
-                        ModifySprites(slotRNGItems.ItemsForRNG[0].Item.GetComponent<SpriteRenderer>().sprite, slots);
-                        break;
-                    case 1:
-                        ModifySprites(slotRNGItems.ItemsForRNG[1].Item.GetComponent<SpriteRenderer>().sprite, slots);
-                        break;
-                    case 2:
-                        ModifySprites(slotRNGItems.ItemsForRNG[2].Item.GetComponent<SpriteRenderer>().sprite, slots);
-                        break;
-                    case 3:
-                        ModifySprites(slotRNGItems.ItemsForRNG[3].Item.GetComponent<SpriteRenderer>().sprite, slots);
-                        break;
-                }
-                break;
+                case JackpotTypes.Grand:
+                    // Randomly select one function to call for Grand
+                    int grandSelection = Random.Range(0, 4); // Generates a random number between 0 and 3
+                    switch (grandSelection)
+                    {
+                        case 0:
+                            ModifySprites(slotRNGItems.ItemsForRNG[0].Item.GetComponent<SpriteRenderer>().sprite, slots);
+                            break;
+                        case 1:
+                            ModifySprites(slotRNGItems.ItemsForRNG[1].Item.GetComponent<SpriteRenderer>().sprite, slots);
+                            break;
+                        case 2:
+                            ModifySprites(slotRNGItems.ItemsForRNG[2].Item.GetComponent<SpriteRenderer>().sprite, slots);
+                            break;
+                        case 3:
+                            ModifySprites(slotRNGItems.ItemsForRNG[3].Item.GetComponent<SpriteRenderer>().sprite, slots);
+                            break;
+                    }
+                    break;
 
-            case JackpotTypes.FreeSpin:
-                // Randomly select one function to call for FreeSpin
-                int freeSpinSelection = Random.Range(0, 4); // Generates a random number between 0 and 3
-                switch (freeSpinSelection)
-                {
-                    case 0:
-                        ModifySprites(slotRNGItems.ItemsForRNG[1].Item.GetComponent<SpriteRenderer>().sprite, slots);
-                        break;
-                    case 1:
-                        ModifySprites(slotRNGItems.ItemsForRNG[1].Item.GetComponent<SpriteRenderer>().sprite, slots);
-                        break;
-                    case 2:
-                        ModifySprites(slotRNGItems.ItemsForRNG[1].Item.GetComponent<SpriteRenderer>().sprite, slots);
-                        break;
-                    case 3:
-                        ModifySprites(slotRNGItems.ItemsForRNG[1].Item.GetComponent<SpriteRenderer>().sprite, slots);
-                        break;
-                }
-                break;
-        }
+                case JackpotTypes.FreeSpin:
+                    // Randomly select one function to call for FreeSpin
+                    int freeSpinSelection = Random.Range(0, 4); // Generates a random number between 0 and 3
+                    switch (freeSpinSelection)
+                    {
+                        case 0:
+                            ModifySprites(slotRNGItems.ItemsForRNG[1].Item.GetComponent<SpriteRenderer>().sprite, slots);
+                            break;
+                        case 1:
+                            ModifySprites(slotRNGItems.ItemsForRNG[1].Item.GetComponent<SpriteRenderer>().sprite, slots);
+                            break;
+                        case 2:
+                            ModifySprites(slotRNGItems.ItemsForRNG[1].Item.GetComponent<SpriteRenderer>().sprite, slots);
+                            break;
+                        case 3:
+                            ModifySprites(slotRNGItems.ItemsForRNG[1].Item.GetComponent<SpriteRenderer>().sprite, slots);
+                            break;
+                    }
+                    break;
+            }
         }
 
         StartRotatingCylinders();
@@ -730,7 +744,7 @@ public class ImageCylinderSpawner : MonoBehaviour
         miniGameButton.interactable = false; 
 
         //TODO:Winning Checked Here
-       CheckWinningCondition();
+        CheckWinningCondition();
         _betConfirmed = false;
     }
 
@@ -770,22 +784,22 @@ public class ImageCylinderSpawner : MonoBehaviour
             //isClick = true;
             _shiftingPanel.SetActive(true);
             Debug.Log("Shifting in if  " + CanShiftCylinder + !DoorAnim.INSTANCE.IsAnimRunning); 
-           // CheckForWinningPatterns.INSTANCE.isButtonClicked = false; 
+            // CheckForWinningPatterns.INSTANCE.isButtonClicked = false; 
         }
         
     }
 
-   public async void ShiftUp(int cylinderCount)
+    public async void ShiftUp(int cylinderCount)
     {
-       if (CanShiftCylinder && !DoorAnim.INSTANCE.IsAnimRunning) {
-           _shiftingPanel.SetActive(false);
-          // isClicked = true; 
+        if (CanShiftCylinder && !DoorAnim.INSTANCE.IsAnimRunning) {
+            _shiftingPanel.SetActive(false);
+            // isClicked = true; 
             //shiftpanelchecker.gameObject.SetActive(false);  
-           // CheckForWinningPatterns.INSTANCE.isButtonClicked = true;
-           cylinderParents[cylinderCount].localRotation = Quaternion.AngleAxis(360 / numberOfImages, Vector3.down) *
-                                                        cylinderParents[cylinderCount].localRotation;
+            // CheckForWinningPatterns.INSTANCE.isButtonClicked = true;
+            cylinderParents[cylinderCount].localRotation = Quaternion.AngleAxis(360 / numberOfImages, Vector3.down) *
+                                                           cylinderParents[cylinderCount].localRotation;
            
-          CanShiftCylinder = false;
+            CanShiftCylinder = false;
             IsLastChanceToWin = true;
             CheckWinningCondition();
           
@@ -798,7 +812,7 @@ public class ImageCylinderSpawner : MonoBehaviour
             //    await Task.Delay((int)_swapSpeed * 100);
             //}
           
-       } 
+        } 
     }
 
     public void Shift_Left()
@@ -807,7 +821,7 @@ public class ImageCylinderSpawner : MonoBehaviour
         _button_left.interactable = false;
         _button_right.interactable = false;
         CheckForWinningPatterns.INSTANCE.checkPattern = true; 
-       // shiftpanelchecker.gameObject.SetActive(false); 
+        // shiftpanelchecker.gameObject.SetActive(false); 
         StartCoroutine(Cor_Shift_Left());
     }
 
@@ -817,7 +831,7 @@ public class ImageCylinderSpawner : MonoBehaviour
         _button_left.interactable = false;
         _button_right.interactable = false;
         CheckForWinningPatterns.INSTANCE.checkPattern = true; 
-       // shiftpanelchecker.gameObject.SetActive(false); 
+        // shiftpanelchecker.gameObject.SetActive(false); 
         StartCoroutine(Cor_Shift_Right());
     }
 
@@ -826,8 +840,8 @@ public class ImageCylinderSpawner : MonoBehaviour
         if (CanShiftCylinder && !DoorAnim.INSTANCE.IsAnimRunning)
         {
             _shiftingPanel.SetActive(false);
-         //   shiftpanelchecker.SetActive(true);
-           // isClicked = true; 
+            //   shiftpanelchecker.SetActive(true);
+            // isClicked = true; 
             
             Vector3[] startPositions = new Vector3[4];
             Vector3[] targetPositions = new Vector3[4];
@@ -867,23 +881,23 @@ public class ImageCylinderSpawner : MonoBehaviour
 
             CanShiftCylinder = false;
             IsLastChanceToWin = true;
-           // if (!shiftpanelchecker.gameObject.activeInHierarchy)
-           // {
-                CheckWinningCondition();
-          //  }
+            // if (!shiftpanelchecker.gameObject.activeInHierarchy)
+            // {
+            CheckWinningCondition();
+            //  }
          
             
         }
     }
     public void CheckWinningCondition()
     {
-       // if(_shiftingPanel.activeInHierarchy == false  &&  CheckForWinningPatterns.INSTANCE.isButtonClicked== true)
-      //  {
-             if (CheckForWinningPatterns.INSTANCE != null ) { 
-                 CheckForWinningPatterns.INSTANCE.CheckPatterns(); 
-                 checkedForPatterns = true;
-             }
-       // }
+        // if(_shiftingPanel.activeInHierarchy == false  &&  CheckForWinningPatterns.INSTANCE.isButtonClicked== true)
+        //  {
+        if (CheckForWinningPatterns.INSTANCE != null ) { 
+            CheckForWinningPatterns.INSTANCE.CheckPatterns(); 
+            checkedForPatterns = true;
+        }
+        // }
             
     }
     IEnumerator Cor_Shift_Right()
@@ -891,8 +905,8 @@ public class ImageCylinderSpawner : MonoBehaviour
         if (CanShiftCylinder && !DoorAnim.INSTANCE.IsAnimRunning)
         {
             _shiftingPanel.SetActive(false);
-           // shiftpanelchecker.SetActive(true);
-           // isClicked = true; 
+            // shiftpanelchecker.SetActive(true);
+            // isClicked = true; 
            
             Vector3[] startPositions = new Vector3[4];
             Vector3[] targetPositions = new Vector3[4];
@@ -935,8 +949,8 @@ public class ImageCylinderSpawner : MonoBehaviour
           
             //if (!shiftpanelchecker.gameObject.activeInHierarchy)
             //{
-                CheckWinningCondition();
-           // }
+            CheckWinningCondition();
+            // }
             
         }
     }
@@ -978,7 +992,7 @@ public class ImageCylinderSpawner : MonoBehaviour
             CheckWinningCondition();
         }
     }
-    
+
     IEnumerator Cor_Shift_Right()
     {
         if (CanShiftCylinder && !DoorAnim.INSTANCE.IsAnimRunning)
@@ -1021,7 +1035,7 @@ public class ImageCylinderSpawner : MonoBehaviour
         if (CanShiftCylinder && !DoorAnim.INSTANCE.IsAnimRunning)
         {
             _shiftingPanel.SetActive(false);
-           // shiftpanelchecker.SetActive(true);
+            // shiftpanelchecker.SetActive(true);
             //isClicked = true; 
             //CheckForWinningPatterns.INSTANCE.isButtonClicked = true; 
             cylinderParents[cylinderCount].localRotation = Quaternion.AngleAxis(360 / numberOfImages, Vector3.up) *
@@ -1037,7 +1051,7 @@ public class ImageCylinderSpawner : MonoBehaviour
             CanShiftCylinder = false;
             IsLastChanceToWin = true;
            
-                CheckWinningCondition();
+            CheckWinningCondition();
            
            
         }

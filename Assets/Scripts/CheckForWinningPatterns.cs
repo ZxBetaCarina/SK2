@@ -198,7 +198,9 @@ public class CheckForWinningPatterns : MonoBehaviour
             }
 
             yield return new WaitForSeconds(2f);
+            
             print("Start Fifteen spins");
+          
             ImageCylinderSpawner.INSTANCE.StartBonusSpin();
 
             spinCounts--;
@@ -273,6 +275,7 @@ public class CheckForWinningPatterns : MonoBehaviour
 
     private void CheckPatternsInList(List<Transform> transformList)
     {
+    // OLD LOGIC 
         int matchCount = 0;
         Sprite prevSprite = null;
         List<Vector3> detected = new List<Vector3>();
@@ -314,6 +317,9 @@ public class CheckForWinningPatterns : MonoBehaviour
                     // Handle special sprites for bonus logic
                     if (prevSprite == bonus1)
                     {
+                        if (ImageCylinderSpawner.INSTANCE.freespin == true)
+                        {
+                            return;}
                         GameController.Instance.RestartLevel.gameObject.SetActive(false);
                         StartCoroutine(DelayFreeSpin());
                     }
@@ -353,7 +359,7 @@ public class CheckForWinningPatterns : MonoBehaviour
                 detected.Clear();
                 prevSprite = null;
             }
-        }
+        } 
     }
 
     private IEnumerator Bonus2start()

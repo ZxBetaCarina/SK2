@@ -289,7 +289,7 @@ namespace SK2
                         {
                             noOfPatterns++;
                             print("Ree spin 1");
-                            if (detectedObject.transform.name == "_Type10(Clone)")
+                            if (detectedObject.transform.name == "_Type10(Clone)" && isBonus != true)
                             {
                                 UIManager.Instance.ShowFreeSpin();
                                 print("Ree spin 2");

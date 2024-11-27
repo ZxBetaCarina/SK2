@@ -6,10 +6,17 @@ namespace SK2Gameplays
     {
         private int? _selectedCylinder;
         public GameObject shiftpanelchecker; 
+        
 
         void Update()
         {
-            if (Input.touchCount > 0)
+
+            if (!ImageCylinderSpawner.INSTANCE._isRotating)
+            {
+                TouchShift();
+            }
+            
+           /* if (Input.touchCount > 0)
             {
                 Touch touch = Input.GetTouch(0);
 
@@ -25,7 +32,7 @@ namespace SK2Gameplays
                 TouchShift();
                 
                 
-            }
+            }*/
         }
 
         private void TouchShift()

@@ -9894,6 +9894,7 @@ MonoBehaviour:
   freespin: 0
   _button_left: {fileID: 1355637476}
   _button_right: {fileID: 1351870635}
+  colmun0: {fileID: 843847344}
   _swapSpeed: 2
   _currentCylinder: 0
   slotAudio: {fileID: 828720081}

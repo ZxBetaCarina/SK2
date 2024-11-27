@@ -48,6 +48,7 @@ public class ImageCylinderSpawner : MonoBehaviour
     public bool freespin; 
     public Button _button_left;
     public Button _button_right;
+    public GameObject colmun0;
 
     private Icons[] _spawnedIcons;
     [SerializeField] private float _swapSpeed;
@@ -817,9 +818,11 @@ public class ImageCylinderSpawner : MonoBehaviour
 
     public void Shift_Left()
     {
-        
+           
         _button_left.interactable = false;
         _button_right.interactable = false;
+        _shiftingPanel.SetActive(false); 
+        colmun0.SetActive(false);
         CheckForWinningPatterns.INSTANCE.checkPattern = true; 
         // shiftpanelchecker.gameObject.SetActive(false); 
         StartCoroutine(Cor_Shift_Left());
@@ -830,6 +833,8 @@ public class ImageCylinderSpawner : MonoBehaviour
         
         _button_left.interactable = false;
         _button_right.interactable = false;
+        _shiftingPanel.SetActive(false); 
+        colmun0.SetActive(false);
         CheckForWinningPatterns.INSTANCE.checkPattern = true; 
         // shiftpanelchecker.gameObject.SetActive(false); 
         StartCoroutine(Cor_Shift_Right());
@@ -837,6 +842,7 @@ public class ImageCylinderSpawner : MonoBehaviour
 
     IEnumerator Cor_Shift_Left()
     {
+        
         if (CanShiftCylinder && !DoorAnim.INSTANCE.IsAnimRunning)
         {
             _shiftingPanel.SetActive(false);
@@ -902,6 +908,7 @@ public class ImageCylinderSpawner : MonoBehaviour
     }
     IEnumerator Cor_Shift_Right()
     {
+        
         if (CanShiftCylinder && !DoorAnim.INSTANCE.IsAnimRunning)
         {
             _shiftingPanel.SetActive(false);

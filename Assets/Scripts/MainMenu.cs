@@ -17,6 +17,7 @@ public class MainMenu : MonoBehaviour
     }
     public void ChangeScene()
     {
+        Debug.Log("CurrentBetIndex 2 "+PlayerPrefs.GetFloat("CurrentBetIndex")); 
         SceneManager.LoadScene(1);
     }
 }

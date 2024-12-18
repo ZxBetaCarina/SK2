@@ -19,23 +19,25 @@ public class GetWeightedRNG
     public static T GetValue<T>(List<WeightedRNG<T>.RNGItem> itemsForRNG)
     {
         int sum = 0;
-
         foreach (var item in itemsForRNG)
         {
             sum += item.Probability;
         }
-        int index = 0;
-        int randomValue = Random.Range(0, sum); 
-        for (int i = itemsForRNG.Count - 1; i >= 0; i--)
-        {
-            if (itemsForRNG[i].Probability < randomValue)
-            {
-                index = i;
-                break;
-            }
 
+        int randomValue = Random.Range(0, sum); // Generate a random value between 0 and sum-1
+
+        int cumulativeProbability = 0;
+        for (int i = 0; i < itemsForRNG.Count; i++)
+        {
+            cumulativeProbability += itemsForRNG[i].Probability;
+
+            // Check if randomValue falls within the range of the current item's cumulative probability
+            if (randomValue < cumulativeProbability)
+            {
+                return itemsForRNG[i].Item; // Return the selected item
+            }
         }
 
-        return itemsForRNG[index].Item;
+        return default(T);
     }
 }

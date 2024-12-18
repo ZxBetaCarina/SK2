@@ -1,21 +1,32 @@
+using System;
 using SK2;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+[Serializable]
+public class PrizeLevels
+{
+    public string PrizeName;
+    public List<Sprite> Icons;
+}
 public class UIManager : MonoBehaviour
 {
+    
     public static UIManager Instance { get; private set; }
+    private GameController _gameController; 
+    public List<PrizeLevels> PrizeLevelsList;
 
     [SerializeField, Tooltip("Panel shown if available balance insuffiecient")] private GameObject balanceInsuffucientPanel;
     [SerializeField] private float balanceInsuffucientPanelActiveForSec;
 
     [SerializeField] private TextMeshProUGUI handsPlayed;
-
-    [SerializeField] private GameObject _winningPanel;
+ 
+    [SerializeField] public GameObject _winningPanel;
     [SerializeField] private TextMeshProUGUI _winningText;
     [SerializeField] private TMP_Text _message;
     [SerializeField] private TextMeshProUGUI _waitingText;
@@ -24,6 +35,7 @@ public class UIManager : MonoBehaviour
     // [SerializeField] private GameObject _muteButton;
     [SerializeField] private GameObject _followPanel;
     [SerializeField] private Button _spinButton;
+    public Button minigameButton;   
     [SerializeField] private Button NormalPaytable;
     [SerializeField] private Button FollowPaytable;
     [SerializeField] private Button _refreshButton;
@@ -32,17 +44,25 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject freeSpinImage;
     private string _waitPrefix = "Please Wait... ";
     private string _playAgainString = "Collect";
-    private string _winningMsg = "Got It!!";
+    public string _winningMsg = " ";
     private string _losignMsg = "You Lose";
     [SerializeField] private float _winningPanelDelay = 5f;
     public bool RubicMode { get; private set; }
     private int _movesLeft;
+    public bool isfreespin = false;
+    public GameObject freespincount;
 
     [SerializeField] private ReadCube _readCube;
     [SerializeField] private CubeState _cubeState;
 
+    private Sprite WinningSpriteName;
+    private Sprite WinningSprite;
+    [SerializeField] private TextMeshProUGUI prizeNameText;
+    public ImageCylinderSpawner ics;
+
     private void Awake()
     {
+        _gameController = FindObjectOfType<GameController>();
         if (Instance == null)
         {
             Instance = this;
@@ -73,6 +93,7 @@ public class UIManager : MonoBehaviour
 
     IEnumerator Start()
     {
+        
         _readCube = FindObjectOfType<ReadCube>();
         _cubeState = FindObjectOfType<CubeState>();
 
@@ -103,7 +124,17 @@ public class UIManager : MonoBehaviour
 
     public void StartGameSetUp()
     {
+        PlayerPrefs.GetFloat("_grand_prize_value", _gameController._grand_prize_value);
+        _gameController._grand_prize_text.text = _gameController._grand_prize_value.ToString();
+        Debug.Log(_gameController._grand_prize_value);
+        PlayerPrefs.GetFloat("_major_prize_value", _gameController._major_prize_value);
+        _gameController._major_prize_text.text = _gameController._major_prize_value.ToString();
+        Debug.Log(_gameController._major_prize_value);
+        PlayerPrefs.GetFloat("_minor_prize_value", _gameController._minor_prize_value);
+        _gameController._minor_prize_text.text = _gameController._minor_prize_value.ToString();
+        Debug.Log(_gameController._minor_prize_text);
         SceneManager.LoadScene(1);
+        
     }
 
     public void TriggerBalanceInsufficient()
@@ -185,15 +216,23 @@ public class UIManager : MonoBehaviour
 
     public void ShowFreeSpin()
     {
+        isfreespin = true; 
+        Debug.Log("Free Spin active, hiding winning panel.");
         StartCoroutine(FreeSpinShow());
     }
 
 
     IEnumerator FreeSpinShow()
     {
-        freeSpinImage.SetActive(true);
-        yield return new WaitForSeconds(2f);
-        freeSpinImage.SetActive(false);
+        
+            freeSpinImage.SetActive(true);
+            isfreespin = true;
+            yield return new WaitForSeconds(2f);
+            freeSpinImage.SetActive(false);
+            isfreespin = false;
+        
+       
+
     }
 
     //private IEnumerator WaitForUserInput()
@@ -222,48 +261,71 @@ public class UIManager : MonoBehaviour
         _spinButton.interactable = false;
         _refreshButton.interactable = false;
         RubicMode = false;
-        if (!CheckForWinningPatterns.INSTANCE.isBonus)
+        if (isfreespin == true)
         {
-            StartCoroutine(nameof(SetWinningPanelActive), _winningMsg);
+            Debug.Log("Free Spin active, hiding winning panel.");
+            _winningPanel.SetActive(false);
         }
+        else
+        {
+            if (!CheckForWinningPatterns.INSTANCE.isBonus)
+            {
+              
+                    StartCoroutine(nameof(SetWinningPanelActive), _winningMsg);
+                    CheckCurrentSprite();
+                
+                
+            }
+        }
+        
         //StopCoroutine(WaitForUserInput());
+        
+
     }
 
     private IEnumerator SetWinningPanelActive(string text)
     {
+        if (isfreespin)
+        {
+            Debug.Log("Free Spin active, hiding winning panel.");
+            _winningPanel.SetActive(false);
+          //  minigameButton.interactable = false;// Hide winning panel during free spin
+            yield break;  // Exit the coroutine early
+        }
         _playAgainButton.interactable = false;
         yield return new WaitForSeconds(_winningPanelDelay);
         //  int _waitTimer = 15;
-        if (ImageCylinderSpawner.INSTANCE.currentSpinJackpot != JackpotTypes.None && ImageCylinderSpawner.INSTANCE.currentSpinJackpot != JackpotTypes.FreeSpin)
+        if ( isfreespin == true)
         {
-            switch (ImageCylinderSpawner.INSTANCE.currentSpinJackpot)
-            {
-                case JackpotTypes.Minor:
-                    _winningText.text = "Minor Jackpot";
-                    break;
+                //  switch (ImageCylinderSpawner.INSTANCE.currentSpinJackpot)
+                //  {
+                //ImageCylinderSpawner.INSTANCE.currentSpinJackpot == JackpotTypes.FreeSpin &&
+                //  }
 
-                case JackpotTypes.Major:
-                    _winningText.text = "Major Jackpot";
-                    break;
-
-                case JackpotTypes.Grand:
-                    _winningText.text = "Grand Jackpot";
-                    break;
-            }
+                print("JACKPOT HIT");
+                print("Winning Panel");
+                _winningPanel.SetActive(false);
+              //  minigameButton.interactable = true;
+        }
+        else
+        {
             print("JACKPOT HIT");
             print("Winning Panel");
             _winningPanel.SetActive(true);
+          //  minigameButton.interactable = false; 
         }
-        // _winningText.text = text;
-        //  _message.text = "";
-        //while (_waitTimer > 0)
-        //{
-        //    _waitingText.text = _waitPrefix + _waitTimer + "s";
-        //    _waitTimer--;
-        //    yield return new WaitForSeconds(1f);
-        //}
-        _waitingText.text = _playAgainString;
-        _playAgainButton.interactable = true;
+            // _winningText.text = text;
+            //  _message.text = "";
+            //while (_waitTimer > 0)
+            //{
+            //    _waitingText.text = _waitPrefix + _waitTimer + "s";
+            //    _waitTimer--;
+            //    yield return new WaitForSeconds(1f);
+            //}
+
+            _waitingText.text = _playAgainString;
+            _playAgainButton.interactable = true;
+        
     }
 
     public void OnClickFollowButton()
@@ -284,5 +346,23 @@ public class UIManager : MonoBehaviour
     {
         SceneManager.LoadScene(index);
     }
+    public void CheckCurrentSprite()
+    {
+        WinningSpriteName = CheckForWinningPatterns.INSTANCE.WinningIconName;
 
+        foreach (var prizeLevel in PrizeLevelsList)
+        {
+            if (prizeLevel.Icons.Contains(WinningSpriteName))
+            {
+                prizeNameText.text = prizeLevel.PrizeName;
+                return; // Exit once a match is found
+            }
+        }
+
+        Debug.Log("No matching prize found for the current sprite.");
+    }
+
+   
+
+    
 }

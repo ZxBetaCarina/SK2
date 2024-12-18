@@ -79,6 +79,7 @@ public class GameManager : MonoBehaviour
 
     public void LoadLevel1()
     {
+        Debug.Log("CurrentBetIndex 5 "+PlayerPrefs.GetFloat("CurrentBetIndex")); 
         SceneManager.LoadScene("Level 1");
     }
 

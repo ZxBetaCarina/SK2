@@ -32,7 +32,7 @@ namespace SK2
         public string nextSceneName = "MainMenu";
         public int _difficultyFactor = 0;
         public bool CylinderSpawning = false;
-
+        private ImageCylinderSpawner ics; 
         public GameObject popupPanel;  // Assign the pop-up panel in the Inspector
                                        // public TMP_Text popupText;  // Assign the Text element for the message
         public Button closeButton;  // Assign the Button element for closing the pop-up
@@ -67,6 +67,7 @@ namespace SK2
         }
         void Start()
         {
+            ics = GetComponent<ImageCylinderSpawner>(); 
             allCylindersParent = new GameObject("AllCylindersParent");  // Create a new empty GameObject as the parent
             GenerateTiles();
 
@@ -124,8 +125,11 @@ namespace SK2
         {
             _spinButton.interactable = false;
             yield return StartCoroutine(DoorAnim.INSTANCE.DoorTrigger());
-            StartCoroutine(PatternDetector.INSTANCE.CheckForPatterns());
+            
+                StartCoroutine(PatternDetector.INSTANCE.CheckForPatterns());
 
+            
+            
             yield return new WaitForSeconds(2f);
 
             yield return StartCoroutine(DoorAnim.INSTANCE.DoorTrigger());
